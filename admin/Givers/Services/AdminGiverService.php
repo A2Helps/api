@@ -38,7 +38,7 @@ class AdminGiverService extends GiverService
 		Log::debug('fetching all givers');
 
 		return QueryBuilder::for(Giver::class)
-			->allowedIncludes(['giver_users'])
+			->allowedIncludes(['giver_users.user'])
 			->allowedFilters([
 				AllowedFilter::exact('id'),
 				'name',

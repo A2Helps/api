@@ -14,9 +14,8 @@ class CreateGiverRequest extends ApiRequest
 	public function rules(): array
 	{
 		return [
-			'giver'           => 'array|required',
-			'giver.name'      => 'required|string',
-			'giver.allotment' => 'required|int',
+			'name'      => 'required|string',
+			'allotment' => 'required|int',
 		];
 	}
 

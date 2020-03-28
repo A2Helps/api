@@ -3,6 +3,7 @@
 namespace Api\GiverUsers\Models;
 
 use Api\Givers\Models\Giver;
+use Api\Users\Models\User;
 use Infrastructure\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Infrastructure\Models\ModelTransformer;
@@ -37,5 +38,9 @@ class GiverUser extends Model implements Transformable
 
 	public function giver() {
 		return $this->belongsTo(Giver::class);
+	}
+
+	public function user() {
+		return $this->belongsTo(User::class);
 	}
 }

@@ -29,7 +29,7 @@ class GiverController extends Controller
 
 	public function create(CreateGiverRequest $request)
 	{
-		$data = $request->get('giver', []);
+		$data = $request->all();
 
 		return new GiverTransformer($this->srvc->create($data), 201);
 	}
