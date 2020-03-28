@@ -183,6 +183,7 @@ return [
 		Api\OrgMembers\OrgMemberServiceProvider::class,
 		Api\Users\UserServiceProvider::class,
 		Api\Donations\DonationServiceProvider::class,
+		Api\Recipients\RecipientServiceProvider::class,
 	],
 
 	/*
