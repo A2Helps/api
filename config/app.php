@@ -181,6 +181,7 @@ return [
 
 		Api\Givers\GiverServiceProvider::class,
 		Api\Users\UserServiceProvider::class,
+		Api\Donations\DonationServiceProvider::class,
 	],
 
 	/*
