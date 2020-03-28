@@ -2,6 +2,7 @@
 
 namespace Infrastructure\Auth\Providers;
 
+use Api\Users\UserFacade;
 use Firebase\Auth\Token\Exception\ExpiredToken;
 use Firebase\Auth\Token\Exception\InvalidSignature;
 use Firebase\Auth\Token\Exception\InvalidToken;
@@ -64,7 +65,7 @@ class FirebaseUserProvider implements UserProvider
 			'duration' => round(microtime(true) - $st, 3),
 		]);
 
-		return $at->user;
+		return UserFacade::getByFbid($uid);
 	}
 
 	private function rejectToken(float $st, string $reason, $token)
