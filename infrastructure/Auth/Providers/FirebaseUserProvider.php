@@ -37,35 +37,34 @@ class FirebaseUserProvider implements UserProvider
 
 		$credential = $credentials[static::CREDENTIAL_KEY];
 
-		// dd($credential);
-
 		Log::debug('Validating access token');
 		$st = microtime(true);
 
 		try {
 			$token = FirebaseAuth::verifyIdToken($credential);
-		} catch (InvalidArgumentException $e) {
-			// malformed
-			return $this->rejectToken($st, 'malformed token', $credential);
 		} catch (ExpiredToken $e) {
 			// expired
 			return $this->rejectToken($st, 'expired token', $credential);
 		} catch (InvalidToken $e) {
 			// invalid
 			return $this->rejectToken($st, 'invalid token', $credential);
+		} catch (InvalidArgumentException $e) {
+			// malformed
+			return $this->rejectToken($st, 'malformed token', $credential);
 		}
 
 		$uid = $token->getClaim('sub');
 		Log::debug('UID', ['uid' => $uid]);
 
-		// resolve user here and now
+		$user = UserFacade::getByFbid($uid);
 
 		Log::info('Accepted access token', [
+			'user_id' => $user->id,
 			'uid' => $uid,
 			'duration' => round(microtime(true) - $st, 3),
 		]);
 
-		return UserFacade::getByFbid($uid);
+		return $user;
 	}
 
 	private function rejectToken(float $st, string $reason, $token)
