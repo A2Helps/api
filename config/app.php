@@ -175,11 +175,12 @@ return [
 		Infrastructure\Http\RouteServiceProvider::class,
 		Infrastructure\Stripe\StripeServiceProvider::class,
 
-		Admin\Givers\GiverServiceProvider::class,
-		Admin\GiverUsers\GiverUserServiceProvider::class,
+		Admin\Orgs\OrgServiceProvider::class,
+		Admin\OrgMembers\OrgMemberServiceProvider::class,
 		Admin\Users\UserServiceProvider::class,
 
-		Api\Givers\GiverServiceProvider::class,
+		Api\Orgs\OrgServiceProvider::class,
+		Api\OrgMembers\OrgMemberServiceProvider::class,
 		Api\Users\UserServiceProvider::class,
 		Api\Donations\DonationServiceProvider::class,
 	],
