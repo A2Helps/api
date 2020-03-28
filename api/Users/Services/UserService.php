@@ -12,6 +12,7 @@ use Api\Users\Events\UserWasDeleted;
 use Api\Users\Events\UserWasUpdated;
 use Api\Users\Exceptions\UserNotFoundException;
 use Api\Users\Models\User;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class UserService
 {
@@ -38,13 +39,18 @@ class UserService
 	// 	return $this->repository->get($options);
 	// }
 
-	// public function getById($id)
-	// {
-	// 	Log::debug('fetching user', ['user_id' => $id, 'options' => $options]);
-	// 	$user = $this->getRequestedUser($id);
+	public function getByFbid($fbid): User
+	{
+		Log::debug('fetching user by fbid', ['fbid' => $fbid]);
 
-	// 	return $user;
-	// }
+		$user = QueryBuilder::for(User::where('fbid', $fbid))->first();
+
+		if (empty($user)) {
+			throw new UserNotFoundException();
+		}
+
+		return $user;
+	}
 
 	// public function create($data)
 	// {
