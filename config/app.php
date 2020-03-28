@@ -173,6 +173,7 @@ return [
 		Infrastructure\Broadcast\BroadcastServiceProvider::class,
 		Infrastructure\Auth\AuthServiceProvider::class,
 		Infrastructure\Http\RouteServiceProvider::class,
+		Infrastructure\Stripe\StripeServiceProvider::class,
 
 		Admin\Givers\GiverServiceProvider::class,
 		Admin\GiverUsers\GiverUserServiceProvider::class,
