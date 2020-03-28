@@ -53,7 +53,7 @@ class AdminOrgService extends OrgService
 		Log::debug('fetching org', ['org_id' => $id]);
 
 		$org = QueryBuilder::for(Org::where('id', $id))
-			->allowedIncludes(['org_members'])
+			->allowedIncludes(['org_members.user'])
 			->first();
 
 		if (empty($org)) {
