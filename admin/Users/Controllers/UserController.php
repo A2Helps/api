@@ -40,4 +40,11 @@ class UserController extends Controller
 
 		return new UserTransformer($this->srvc->update($id, $data));
 	}
+
+	public function createToken($id, Request $request)
+	{
+		$data = $request->all();
+
+		return $this->srvc->createAuthToken($id);
+	}
 }

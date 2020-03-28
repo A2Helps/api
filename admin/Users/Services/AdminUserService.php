@@ -99,9 +99,23 @@ class AdminUserService extends UserService
 
 	public function delete($userId): void
 	{
-		$user = $this->getRequestedUser($userId);
+		$this->getRequestedUser($userId);
 
 		$this->repository->delete($userId);
 		Log::info('deleted user', ['user_id' => $userId]);
+	}
+
+	public function createAuthToken($id): array
+	{
+		$user = $this->getRequestedUser($id);
+
+		Log::info('creating custom token for user', ['user_id' => $user->id, 'fbid' => $user->fbid]);
+
+		$token = (string) FirebaseAuth::createCustomToken($user->fbid);
+		$signIn = FirebaseAuth::signInWithCustomToken($token);
+
+		return [
+			'token' => $signIn->idToken()
+		];
 	}
 }
