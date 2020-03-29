@@ -12,6 +12,7 @@
 		"cumulati/distributed-laravel": "^0.3.2",
 		"cumulati/monolog-context": "^0.1.0",
 		"cumulati/optimus-heimdal": "^1.7.2",
+		"doctrine/dbal": "^2.10",
 		"fideloper/proxy": "^4.2",
 		"fruitcake/laravel-cors": "^1.0",
 		"guzzlehttp/guzzle": "^6.3",
