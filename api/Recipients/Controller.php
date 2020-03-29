@@ -2,6 +2,7 @@
 
 namespace Api\Recipients;
 
+use Api\Recipients\Requests\BulkUpdateRequest;
 use Illuminate\Http\Request;
 use Infrastructure\Http\Controller as BaseController;
 use Api\Recipients\Requests\CreateRecipientRequest;
@@ -39,5 +40,13 @@ class Controller extends BaseController
 		$data = $request->all();
 
 		return new RecipientTransformer($this->srvc->update($id, $data));
+	}
+
+	public function bulkUpdate(BulkUpdateRequest $request)
+	{
+		$data = $request->get('data', []);
+		$recipients = $request->get('recipients', []);
+
+		return RecipientTransformer::collection($this->srvc->bulkUpdate($recipients, $data));
 	}
 }

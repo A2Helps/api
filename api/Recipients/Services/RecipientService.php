@@ -15,6 +15,7 @@ use Cumulati\Monolog\LogContext;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Infrastructure\Exceptions\UnauthorizedException;
 use Infrastructure\Services\BaseService;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -124,6 +125,20 @@ class RecipientService extends BaseService
 		}
 
 		return $recipient;
+	}
+
+	public function bulkUpdate(array $ids, array $data): Collection
+	{
+		$data = Arr::only($data, ['sent', 'printed']);
+		$recipients = new Collection();
+
+		DB::transaction(function() use ($ids, $data, &$recipients) {
+			foreach ($ids as $id) {
+				$recipients->push($this->update($id, $data));
+			}
+		});
+
+		return $recipients;
 	}
 
 	private function getRequestedRecipient($id): Recipient
