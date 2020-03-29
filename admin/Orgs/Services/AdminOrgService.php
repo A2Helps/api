@@ -65,9 +65,9 @@ class AdminOrgService extends OrgService
 
 	public function create($data): Org
 	{
-		$data['count_given'] = 0;
+		$data['count_distributed'] = 0;
 		$org = Org::create(
-			Arr::only($data, ['name', 'allotment', 'enabled', 'count_given'])
+			Arr::only($data, ['name', 'allotment', 'enabled', 'count_distributed'])
 		);
 
 		Log::info('created org', ['org_id' => $org->id]);
@@ -80,8 +80,8 @@ class AdminOrgService extends OrgService
 		$id = expand_uuid($id);
 		$org = $this->getRequestedOrg($id);
 
-		if (!empty($data['allotment']) && $data['allotment'] < $org->count_given) {
-			$data['allotment'] = $org->count_given;
+		if (!empty($data['allotment']) && $data['allotment'] < $org->count_distributed) {
+			$data['allotment'] = $org->count_distributed;
 		}
 
 		$org->fill(Arr::only($data, ['enabled', 'allotment']));

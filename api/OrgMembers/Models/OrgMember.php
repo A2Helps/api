@@ -26,14 +26,14 @@ class OrgMember extends Model implements Transformable
 		'org_id',
 		'user_id',
 		'allotment',
-		'count_given',
+		'count_distributed',
 		'enabled'
 	];
 
 	protected $casts = [
-		'allotment'   => 'int',
-		'count_given' => 'int',
-		'enabled'     => 'bool',
+		'allotment'         => 'int',
+		'count_distributed' => 'int',
+		'enabled'           => 'bool',
 	];
 
 	public function org() {

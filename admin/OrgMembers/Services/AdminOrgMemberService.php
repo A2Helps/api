@@ -67,7 +67,7 @@ class AdminOrgMemberService extends OrgMemberService
 
 	public function create($data): OrgMember
 	{
-		$data['count_given'] = 0;
+		$data['count_distributed'] = 0;
 		$data['user_id'] = expand_uuid($data['user_id']);
 		$data['org_id'] = expand_uuid($data['org_id']);
 
@@ -75,7 +75,7 @@ class AdminOrgMemberService extends OrgMemberService
 		AdminUserFacade::getById($data['user_id']);
 
 		$orgUser = OrgMember::create(
-			Arr::only($data, ['user_id', 'org_id', 'allotment', 'enabled', 'count_given'])
+			Arr::only($data, ['user_id', 'org_id', 'allotment', 'enabled', 'count_distributed'])
 		);
 
 		Log::info('created org_member', ['org_member_id' => $orgUser->id]);
@@ -88,8 +88,8 @@ class AdminOrgMemberService extends OrgMemberService
 		$id = expand_uuid($id);
 		$gu = $this->getRequestedOrgMember($id);
 
-		if (!empty($data['allotment']) && $data['allotment'] < $gu->count_given) {
-			$data['allotment'] = $gu->count_given;
+		if (!empty($data['allotment']) && $data['allotment'] < $gu->count_distributed) {
+			$data['allotment'] = $gu->count_distributed;
 		}
 
 		$gu->fill(Arr::only($data, ['enabled', 'allotment']));

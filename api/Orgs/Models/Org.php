@@ -25,14 +25,14 @@ class Org extends Model implements Transformable
 	protected $fillable = [
 		'name',
 		'allotment',
-		'count_given',
+		'count_distirbuted',
 		'enabled',
 	];
 
 	protected $casts = [
-		'allotment'   => 'int',
-		'count_given' => 'int',
-		'enabled'     => 'bool',
+		'allotment'         => 'int',
+		'count_distirbuted' => 'int',
+		'enabled'           => 'bool',
 	];
 
 	public function orgMembers() {
