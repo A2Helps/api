@@ -34,9 +34,10 @@ class Controller extends BaseController
 		return new RecipientTransformer($this->srvc->create($data), 201);
 	}
 
-	public function delete($id)
+	public function update($id, Request $request)
 	{
-		$this->srvc->delete($id);
-		return;
+		$data = $request->all();
+
+		return new RecipientTransformer($this->srvc->update($id, $data));
 	}
 }

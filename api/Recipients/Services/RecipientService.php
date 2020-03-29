@@ -11,13 +11,15 @@ use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Api\Recipients\Exceptions\RecipientNotFoundException;
 use Api\Recipients\Models\Recipient;
+use Cumulati\Monolog\LogContext;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Infrastructure\Exceptions\UnauthorizedException;
+use Infrastructure\Services\BaseService;
 use Spatie\QueryBuilder\AllowedFilter;
 
-class RecipientService
+class RecipientService extends BaseService
 {
 	private $auth;
 
@@ -82,7 +84,7 @@ class RecipientService
 		$data['org_id'] = $user->orgMember->org_id;
 
 		// TODO:: check if code is in use
-		$data['code'] = strtoupper(Str::random(12));
+		$data['code'] = strtoupper(Str::random(8));
 
 		$recipient = Recipient::create($data);
 
@@ -91,18 +93,37 @@ class RecipientService
 		return $recipient;
 	}
 
-	public function delete($id): void
+	public function update($id, array $data): Recipient
 	{
-		$user = Auth::user();
+		$id = expand_uuid($id);
+
+		$lc = new LogContext(['recipient_id' => $id]);
+		$lc->debug('received request to update recipient');
+
 		$recipient = $this->getRequestedRecipient($id);
 
-		if ($recipient->org_id !== $user->orgMember->org_id) {
-			throw new UnauthorizedException();
+		$this->checkUserOrgPerm($recipient->org_id);
+
+		$recipient->fill(Arr::only($data, ['printed', 'sent', 'name']));
+
+		// mark recipient distributed if it has been printed
+		if ($recipient->printed && ! $recipient->distributed) {
+			$recipient->distributed = true;
+
+			$lc->info('marking recipient distributed', [
+				'printed' => true
+			]);
 		}
 
-		$recipient->delete();
+		$recipient->save();
+		$lc->info('updated recipient');
 
-		Log::info('deleted recipient', ['recipient_id' => $id]);
+		if ($recipient->sent && ! $recipient->distributed) {
+			$lc->warning('TODO: this is where we DISTRIB RECIPIENT', ['sent' => true]);
+			// DistributeRecipient::dispatch($recipient);
+		}
+
+		return $recipient;
 	}
 
 	private function getRequestedRecipient($id): Recipient
