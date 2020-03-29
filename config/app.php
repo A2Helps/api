@@ -56,6 +56,10 @@ return [
 
 	'asset_url' => env('ASSET_URL', null),
 
+	'web' => [
+		'url' => env('WEB_URL', 'https://a2helps.com')
+	],
+
 	/*
 	|--------------------------------------------------------------------------
 	| Application Timezone
