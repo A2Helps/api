@@ -1,14 +1,14 @@
 <?php
 
-namespace Admin\OrgMembers\Controllers;
+namespace Admin\OrgMembers;
 
 use Illuminate\Http\Request;
-use Infrastructure\Http\Controller;
+use Infrastructure\Http\Controller as BaseController;
 use Admin\OrgMembers\Requests\CreateOrgMemberRequest;
 use Admin\OrgMembers\Services\AdminOrgMemberService;
 use Api\OrgMembers\Transformers\OrgMemberTransformer;
 
-class OrgMemberController extends Controller
+class Controller extends BaseController
 {
 	private $srvc;
 
