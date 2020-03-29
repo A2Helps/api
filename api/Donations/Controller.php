@@ -28,6 +28,7 @@ class Controller extends BaseController
 	{
 		$data = $request->all();
 
-		return new DonationTransformer($this->srvc->update($id, $data));
+		$this->srvc->update($id, $data);
+		return;
 	}
 }

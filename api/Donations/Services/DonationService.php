@@ -55,7 +55,7 @@ class DonationService
 		return $donation;
 	}
 
-	public function update($id, array $data): Donation
+	public function update($id, array $data): void
 	{
 		$donation = $this->getRequestedDonation($id);
 
@@ -71,7 +71,7 @@ class DonationService
 		}
 
 		$donation->save();
-		return $donation;
+		return;
 	}
 
 	protected function getRequestedDonation($id): Donation
