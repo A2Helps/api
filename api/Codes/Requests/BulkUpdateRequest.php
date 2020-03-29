@@ -1,10 +1,10 @@
 <?php
 
-namespace Api\Recipients\Requests;
+namespace Api\Codes\Requests;
 
 use Infrastructure\Http\ApiRequest;
 
-class CreateRecipientRequest extends ApiRequest
+class BulkUpdateRequest extends ApiRequest
 {
 	public function authorize()
 	{
@@ -14,9 +14,9 @@ class CreateRecipientRequest extends ApiRequest
 	public function rules(): array
 	{
 		return [
-			'name'  => 'string',
-			'email' => 'email',
-			'phone' => 'digits:10'
+			'data'         => 'required|array',
+			'codes'   => 'required|array',
+			'codes.*' => 'string'
 		];
 	}
 

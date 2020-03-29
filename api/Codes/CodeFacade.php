@@ -1,10 +1,10 @@
 <?php
 
-namespace Api\Recipients;
+namespace Api\Codes;
 
 use Illuminate\Support\Facades\Facade;
 
-class RecipientFacade extends Facade
+class CodeFacade extends Facade
 {
 	/**
 	 * Get the registered name of the component.
@@ -13,6 +13,6 @@ class RecipientFacade extends Facade
 	 */
 	protected static function getFacadeAccessor()
 	{
-		return 'RecipientService';
+		return 'CodeService';
 	}
 }

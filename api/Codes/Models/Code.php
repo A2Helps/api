@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Recipients\Models;
+namespace Api\Codes\Models;
 
 use Api\OrgMembers\Models\OrgMember;
 use Api\Orgs\Models\Org;
@@ -9,13 +9,13 @@ use Infrastructure\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Infrastructure\Database\Eloquent\Timestamper;
 
-class Recipient extends Model
+class Code extends Model
 {
 	use SoftDeletes;
 	use Timestamper;
 
 	protected $keyType = 'string';
-	public $table = 'recipient';
+	public $table = 'code';
 
 	/**
 	* The attributes that are mass assignable.

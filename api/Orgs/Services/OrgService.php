@@ -46,7 +46,7 @@ class OrgService
 		}
 
 		return QueryBuilder::for(Org::where('id', $user->orgMember->org_id))
-			->allowedIncludes(['org_members.user', 'recipients'])
+			->allowedIncludes(['org_members.user', 'codes'])
 			->allowedFilters([
 				AllowedFilter::exact('id'),
 				'name',
@@ -67,7 +67,7 @@ class OrgService
 		Log::debug('fetching org', ['org_id' => $id]);
 
 		$org = QueryBuilder::for(Org::where('id', $id))
-			->allowedIncludes(['org_members.user', 'recipients'])
+			->allowedIncludes(['org_members.user', 'codes'])
 			->first();
 
 		if (empty($org)) {

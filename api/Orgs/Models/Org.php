@@ -3,7 +3,7 @@
 namespace Api\Orgs\Models;
 
 use Api\OrgMembers\Models\OrgMember;
-use Api\Recipients\Models\Recipient;
+use Api\Codes\Models\Code;
 use Infrastructure\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Infrastructure\Models\ModelTransformer;
@@ -39,7 +39,7 @@ class Org extends Model implements Transformable
 		return $this->hasMany(OrgMember::class);
 	}
 
-	public function recipients() {
-		return $this->hasMany(Recipient::class);
+	public function codes() {
+		return $this->hasMany(Code::class);
 	}
 }

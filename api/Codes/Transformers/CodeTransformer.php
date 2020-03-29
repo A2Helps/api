@@ -1,10 +1,10 @@
 <?php
 
-namespace Api\Recipients\Transformers;
+namespace Api\Codes\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RecipientTransformer extends JsonResource
+class CodeTransformer extends JsonResource
 {
 	/**
 	 * Transform the resource into an array.

@@ -183,11 +183,11 @@ return [
 		Admin\OrgMembers\OrgMemberServiceProvider::class,
 		Admin\Users\UserServiceProvider::class,
 
-		Api\Orgs\OrgServiceProvider::class,
-		Api\OrgMembers\OrgMemberServiceProvider::class,
-		Api\Users\UserServiceProvider::class,
+		Api\Codes\CodeServiceProvider::class,
 		Api\Donations\DonationServiceProvider::class,
-		Api\Recipients\RecipientServiceProvider::class,
+		Api\OrgMembers\OrgMemberServiceProvider::class,
+		Api\Orgs\OrgServiceProvider::class,
+		Api\Users\UserServiceProvider::class,
 	],
 
 	/*
