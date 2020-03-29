@@ -1,6 +1,6 @@
 <?php
 
-$router->get('/orgs',         'OrgController@getAll');
-$router->post('/orgs',        'OrgController@create');
-$router->get('/orgs/{id}',    'OrgController@getById');
-$router->put('/orgs/{id}',    'OrgController@update');
+$router->get('/orgs',         '\Admin\Orgs\Controller@getAll');
+$router->post('/orgs',        '\Admin\Orgs\Controller@create');
+$router->get('/orgs/{id}',    '\Admin\Orgs\Controller@getById');
+$router->put('/orgs/{id}',    '\Admin\Orgs\Controller@update');
