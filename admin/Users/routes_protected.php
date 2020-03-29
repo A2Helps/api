@@ -1,8 +1,8 @@
 <?php
 
-$router->get('/users',         'UserController@getAll');
-$router->post('/users',        'UserController@create');
-$router->get('/users/{id}',    'UserController@getById');
-$router->put('/users/{id}',    'UserController@update');
+$router->get('/users',         '\Admin\Users\Controller@getAll');
+$router->post('/users',        '\Admin\Users\Controller@create');
+$router->get('/users/{id}',    '\Admin\Users\Controller@getById');
+$router->put('/users/{id}',    '\Admin\Users\Controller@update');
 
-$router->post('/users/{id}/token', 'UserController@createToken');
+$router->post('/users/{id}/token', '\Admin\Users\Controller@createToken');

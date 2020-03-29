@@ -1,14 +1,14 @@
 <?php
 
-namespace Admin\Users\Controllers;
+namespace Admin\Users;
 
 use Illuminate\Http\Request;
-use Infrastructure\Http\Controller;
+use Infrastructure\Http\Controller as BaseController;
 use Admin\Users\Requests\CreateUserRequest;
 use Admin\Users\Services\AdminUserService;
 use Api\Users\Transformers\UserTransformer;
 
-class UserController extends Controller
+class Controller extends BaseController
 {
 	private $srvc;
 
