@@ -12,6 +12,7 @@ use Api\Donations\Exceptions\DonationNotFoundException;
 use Api\Donations\Models\Donation;
 use Cumulati\Monolog\LogContext;
 use Illuminate\Support\Arr;
+use Infrastructure\Exceptions\UnauthorizedException;
 use Infrastructure\Stripe\StripeFacade;
 
 class DonationService
@@ -51,6 +52,25 @@ class DonationService
 
 		$lc->info('created stripe checkout session for donation', ['session_id' => $donation->co_session]);
 
+		return $donation;
+	}
+
+	public function update($id, array $data): Donation
+	{
+		$donation = $this->getRequestedDonation($id);
+
+		if ($donation->completed || $donation->canceled) {
+			throw new UnauthorizedException();
+		}
+
+		if (!empty($data['canceled'])) {
+			$donation->canceled = true;
+		}
+		else if (!empty($data['completed'])) {
+			$donation->completed = true;
+		}
+
+		$donation->save();
 		return $donation;
 	}
 
