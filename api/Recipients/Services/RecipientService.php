@@ -47,6 +47,10 @@ class RecipientService extends BaseService
 			->allowedFilters([
 				'phone',
 				'email',
+				'sent',
+				'printed',
+				'distributed',
+				AllowedFilter::scope('used'),
 			])
 			->get();
 	}

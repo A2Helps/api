@@ -4,6 +4,7 @@ namespace Api\Recipients\Models;
 
 use Api\OrgMembers\Models\OrgMember;
 use Api\Orgs\Models\Org;
+use Illuminate\Database\Eloquent\Builder;
 use Infrastructure\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Infrastructure\Database\Eloquent\Timestamper;
@@ -17,10 +18,10 @@ class Recipient extends Model
 	public $table = 'recipient';
 
 	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
+	* The attributes that are mass assignable.
+	*
+	* @var array
+	*/
 	protected $fillable = [
 		'code',
 		'phone',
@@ -74,6 +75,23 @@ class Recipient extends Model
 
 	public function getDistributingAttribute() {
 		return $this->sent && ! $this->distributed;
+	}
+
+	public function scopeUsed(Builder $query, $used): Builder {
+		$used = (bool) $used;
+
+		if ($used) {
+			// only select onces with an email or phone or printed
+
+			return $query->where(function($q) {
+				return $q->whereNotNull('email')
+					->orWhereNotNull('phone')
+					->orWhere('printed', true);
+			});
+		}
+
+		// where not used
+		return $query->whereNull('email')->whereNull('phone')->where('printed', false);
 	}
 
 	public function org() {
