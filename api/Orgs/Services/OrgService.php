@@ -14,6 +14,9 @@ use Api\Orgs\Events\OrgWasUpdated;
 use Api\Orgs\Exceptions\OrgNotFoundException;
 use Api\Orgs\Models\Org;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Infrastructure\Exceptions\UnauthorizedException;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class OrgService
 {
@@ -33,15 +36,46 @@ class OrgService
 		$this->dispatcher = $dispatcher;
 	}
 
-	// public function getAll(): Collection
-	// {
-	// 	Log::debug('fetching all orgs');
-	// }
+	public function getAll(): Collection
+	{
+		$user = Auth::user();
+		Log::debug('fetching all orgs');
 
-	// public function getById($id): Org
-	// {
-	// 	Log::debug('fetching org', ['org_id' => $id]);
-	// }
+		if (empty($user->orgMember)) {
+			throw new UnauthorizedException();
+		}
+
+		return QueryBuilder::for(Org::where('id', $user->orgMember->org_id))
+			->allowedIncludes(['org_members.user', 'recipients'])
+			->allowedFilters([
+				AllowedFilter::exact('id'),
+				'name',
+				AllowedFilter::exact('enabled'),
+			])
+			->get();
+	}
+
+	public function getById($id): Org
+	{
+		$user = Auth::user();
+		$id = expand_uuid($id);
+
+		if (empty($user->orgMember) || $id !== $user->orgMember->org_id) {
+			throw new UnauthorizedException();
+		}
+
+		Log::debug('fetching org', ['org_id' => $id]);
+
+		$org = QueryBuilder::for(Org::where('id', $id))
+			->allowedIncludes(['org_members.user', 'recipients'])
+			->first();
+
+		if (empty($org)) {
+			throw new OrgNotFoundException();
+		}
+
+		return $org;
+	}
 
 	// public function create($data): Org
 	// {
