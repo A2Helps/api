@@ -1,14 +1,14 @@
 <?php
 
-namespace Api\Orgs\Controllers;
+namespace Api\Orgs;
 
 use Illuminate\Http\Request;
-use Infrastructure\Http\Controller;
+use Infrastructure\Http\Controller as BaseController;
 use Api\Orgs\Requests\CreateOrgRequest;
 use Api\Orgs\Services\OrgService;
 use Api\Orgs\Transformers\OrgTransformer;
 
-class OrgController extends Controller
+class Controller extends BaseController
 {
 	private $srvc;
 

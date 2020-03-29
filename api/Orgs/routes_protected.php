@@ -1,8 +1,8 @@
 <?php
 
-$router->get('/orgs',         'OrgController@getAll');
-$router->get('/orgs/{id}',    'OrgController@getById');
+$router->get('/orgs',         '\Api\Orgs\Controller@getAll');
+$router->get('/orgs/{id}',    '\Api\Orgs\Controller@getById');
 
-// $router->post('/orgs',        'OrgController@create');
-// $router->put('/orgs/{id}',    'OrgController@update');
-// $router->delete('/orgs/{id}', 'OrgController@delete');
+// $router->post('/orgs',        '\Api\Orgs\Controller@create');
+// $router->put('/orgs/{id}',    '\Api\Orgs\Controller@update');
+// $router->delete('/orgs/{id}', '\Api\Orgs\Controller@delete');

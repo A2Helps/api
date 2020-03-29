@@ -1,14 +1,14 @@
 <?php
 
-namespace Api\Donations\Controllers;
+namespace Api\Donations;
 
 use Illuminate\Http\Request;
-use Infrastructure\Http\Controller;
+use Infrastructure\Http\Controller as BaseController;
 use Api\Donations\Requests\CreateDonationRequest;
 use Api\Donations\Services\DonationService;
 use Api\Donations\Transformers\DonationTransformer;
 
-class DonationController extends Controller
+class Controller extends BaseController
 {
 	private $srvc;
 

@@ -1,14 +1,14 @@
 <?php
 
-namespace Api\Recipients\Controllers;
+namespace Api\Recipients;
 
 use Illuminate\Http\Request;
-use Infrastructure\Http\Controller;
+use Infrastructure\Http\Controller as BaseController;
 use Api\Recipients\Requests\CreateRecipientRequest;
 use Api\Recipients\Services\RecipientService;
 use Api\Recipients\Transformers\RecipientTransformer;
 
-class RecipientController extends Controller
+class Controller extends BaseController
 {
 	private $srvc;
 

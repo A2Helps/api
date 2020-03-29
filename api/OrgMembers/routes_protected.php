@@ -1,7 +1,7 @@
 <?php
 
-// $router->get('/org_members',         'OrgMemberController@getAll');
-// $router->get('/org_members/{id}',    'OrgMemberController@getById');
-// $router->post('/org_members',        'OrgMemberController@create');
-// $router->put('/org_members/{id}',    'OrgMemberController@update');
-// $router->delete('/org_members/{id}', 'OrgMemberController@delete');
+// $router->get('/org_members',         '\Api\OrgMembers\Controller@getAll');
+// $router->get('/org_members/{id}',    '\Api\OrgMembers\Controller@getById');
+// $router->post('/org_members',        '\Api\OrgMembers\Controller@create');
+// $router->put('/org_members/{id}',    '\Api\OrgMembers\Controller@update');
+// $router->delete('/org_members/{id}', '\Api\OrgMembers\Controller@delete');

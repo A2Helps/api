@@ -1,8 +1,8 @@
 <?php
 
-$router->post('/recipients',        'RecipientController@create');
-$router->get('/recipients',         'RecipientController@getAll');
-$router->get('/recipients/{id}',    'RecipientController@getById');
-$router->delete('/recipients/{id}', 'RecipientController@delete');
+$router->post('/recipients',        '\Api\Recipients\Controller@create');
+$router->get('/recipients',         '\Api\Recipients\Controller@getAll');
+$router->get('/recipients/{id}',    '\Api\Recipients\Controller@getById');
+$router->delete('/recipients/{id}', '\Api\Recipients\Controller@delete');
 
-// $router->put('/recipients/{id}',    'RecipientController@update');
+// $router->put('/recipients/{id}',    '\Api\Recipients\Controller@update');

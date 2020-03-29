@@ -1,13 +1,13 @@
 <?php
 
-namespace Api\Users\Controllers;
+namespace Api\Users;
 
 use Illuminate\Http\Request;
-use Infrastructure\Http\Controller;
+use Infrastructure\Http\Controller as BaseController;
 use Api\Users\Requests\CreateUserRequest;
 use Api\Users\Services\UserService;
 
-class UserController extends Controller
+class Controller extends BaseController
 {
 	private $srvc;
 

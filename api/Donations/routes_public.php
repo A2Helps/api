@@ -1,3 +1,3 @@
 <?php
 
-$router->post('/donations',        'DonationController@create');
+$router->post('/donations',        '\Api\Donations\Controller@create');
