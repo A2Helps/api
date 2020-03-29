@@ -2,40 +2,35 @@
 
 namespace Infrastructure\Database\Eloquent;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 trait Timestamper
 {
 	protected function touchTimestamp(
-		Model &$model,
+		bool $value,
 		string $property,
-		array &$data,
-		string $atKey = null
+		string $atProperty = null,
+		Carbon $when = null
 	) {
-		if (! array_key_exists($property, $data)) {
+		$atProperty = $atProperty ?? sprintf('%s_at', $property);
+		$when = $when ?? now();
+
+		if ($value && !$this->attributes[$property]) {
+			$this->attributes[$atProperty] = $when;
+		}
+		else if (!$value && $this->attributes[$property]) {
+			$this->attributes[$atProperty] = null;
+		}
+		else {
 			return;
 		}
 
-		// if we are not changing anything, return
-		if ($model->{$property} == $data[$property]) {
-			return;
-		}
-
-		$atKey = $atKey ?? sprintf('%s_at', $property);
-
-		if (! $data[$property]) {
-			$model->{$atKey} = null;
-		} else {
-			$now = now();
-			Log::debug('timestamping attribute', [
-				'model'    => get_class($model),
-				'property' => $atKey,
-				'time'     => $now,
-			]);
-
-			$model->{$atKey} = $now;
-		}
-
-		unset($data[$atKey]);
+		Log::debug('set timestamp property', [
+			'model'    => get_class($this),
+			'id'       => $this->id,
+			'property' => $atProperty,
+			'time'     => $when,
+		]);
 	}
 }
