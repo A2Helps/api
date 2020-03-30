@@ -82,9 +82,10 @@ class CodeService extends BaseService
 		return $code;
 	}
 
-	public function update($id, array $data): Code
+	public function update(string $id, array $data): Code
 	{
 		$id = expand_uuid($id);
+		$user = Auth::user();
 
 		$lc = new LogContext(['code_id' => $id]);
 		$lc->debug('received request to update code');
@@ -93,11 +94,23 @@ class CodeService extends BaseService
 
 		$this->checkUserOrgPerm($code->org_id);
 
+		// FIXME:
+		// $data = Arr::only($data, ['email', 'phone']);
+		// if (! empty($data['email'])) {
+		// 	$data['email'] = strtolower($data['email']);
+		// }
+
 		$code->fill(Arr::only($data, ['printed', 'sent', 'name']));
+
+		// if code is now used, attach orgMember
+		if ($code->used && empty($code->org_member_id)) {
+			$code->org_member_id = $user->orgMember->id;
+		}
 
 		// mark code distributed if it has been printed
 		if ($code->printed && ! $code->distributed) {
 			$code->distributed = true;
+			$code->org_member_id = $user->orgMember->id;
 
 			$lc->info('marking code distributed', [
 				'printed' => true

@@ -92,7 +92,7 @@ class OrgService
 	// 	Log::info('deleted org', ['org_id' => $id]);
 	// }
 
-	private function getRequestedOrg($id): Org
+	protected function getRequestedOrg($id): Org
 	{
 		$id = expand_uuid($id);
 		$org = Org::find($id);
