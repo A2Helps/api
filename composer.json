@@ -21,6 +21,7 @@
 		"laravel/tinker": "^2.0",
 		"pascaldevink/shortuuid": "^2.2",
 		"spatie/laravel-query-builder": "^2.8",
+		"spatie/laravel-webhook-client": "^2.5",
 		"stripe/stripe-php": "^7.27"
 	},
 	"require-dev": {
