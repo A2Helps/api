@@ -179,6 +179,7 @@ return [
 		Infrastructure\Http\RouteServiceProvider::class,
 		Infrastructure\Stripe\StripeServiceProvider::class,
 
+		Admin\Codes\CodeServiceProvider::class,
 		Admin\Orgs\OrgServiceProvider::class,
 		Admin\OrgMembers\OrgMemberServiceProvider::class,
 		Admin\Users\UserServiceProvider::class,
