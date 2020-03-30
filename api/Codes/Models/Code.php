@@ -56,6 +56,7 @@ class Code extends Model
 
 	protected $appends = [
 		'distributing',
+		'used',
 	];
 
 	public function setPrintedAttribute($value) {
@@ -77,7 +78,11 @@ class Code extends Model
 		return $this->sent && ! $this->distributed;
 	}
 
-	public function scopeUsed(Builder $query, $used): Builder {
+	public function getUsedAttribute() {
+		return $this->email || $this->phone || $this->printed;
+	}
+
+	public function scopeOfUsed(Builder $query, $used): Builder {
 		$used = (bool) $used;
 
 		if ($used) {
