@@ -55,7 +55,7 @@ class CodeService extends BaseService
 			->get();
 	}
 
-	public function getById($id): Code
+	public function getById(string $id): Code
 	{
 		$id = expand_uuid($id);
 		$user = Auth::user();
@@ -71,30 +71,13 @@ class CodeService extends BaseService
 		return $code;
 	}
 
-	public function create($data): Code
+	public function getByCode(string $code): Code
 	{
-		$user = Auth::user();
+		$code = Code::where('code', $code)->first();
 
-		if (empty($user->orgMember)) {
-			throw new \Exception('Org member not found');
+		if (empty($code)) {
+			throw new CodeNotFoundException();
 		}
-
-		$data = Arr::only($data, ['email', 'phone']);
-
-		if (! empty($data['email'])) {
-			$data['email'] = strtolower($data['email']);
-		}
-
-		$data['org_member_id'] = $user->orgMember->id;
-		$data['org_id'] = $user->orgMember->org_id;
-		// FIXME: org_member_id should be set upon entry or print
-
-		// TODO:: check if code is in use
-		$data['code'] = strtoupper(Str::random(8));
-
-		$code = Code::create($data);
-
-		Log::info('created code', ['code_id' => $code->id]);
 
 		return $code;
 	}
