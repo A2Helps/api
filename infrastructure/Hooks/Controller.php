@@ -1,18 +1,20 @@
 <?php
 
-namespace Infrastructure\Webhooks\Controllers;
+namespace Infrastructure\Hooks;
 
-use Api\WebhookCalls\Models\WebhookCall;
+use Infrastructure\Hooks\WebhookCall;
 use Illuminate\Http\Request;
 use Infrastructure\Http\Controller as BaseController;
-use Infrastructure\Webhooks\Processors\ProcessWebhook_Pusher_Job;
-use Infrastructure\Webhooks\Processors\ProcessWebhook_Test_Job;
-use Infrastructure\Webhooks\SignatureValidators\TestSignatureValidator;
+use Infrastructure\Hooks\Processors\ProcessHook_Pusher_Job;
+use Infrastructure\Hooks\Processors\ProcessHook_Stripe_Job;
+use Infrastructure\Hooks\Processors\ProcessHook_Test_Job;
+use Infrastructure\Hooks\SignatureValidators\TestSignatureValidator;
+use Infrastructure\Hooks\SignatureValidators\StripeSignatureValidator;
 use Spatie\WebhookClient\SignatureValidator\DefaultSignatureValidator;
 use Spatie\WebhookClient\WebhookProcessor;
 use Spatie\WebhookClient\WebhookProfile\ProcessEverythingWebhookProfile;
 
-class WebhookController extends BaseController
+class Controller extends BaseController
 {
 	public function receive_test(Request $request)
 	{
@@ -25,7 +27,7 @@ class WebhookController extends BaseController
 			'signature_validator'   => TestSignatureValidator::class,
 			'webhook_profile'       => ProcessEverythingWebhookProfile::class,
 			'webhook_model'         => WebhookCall::class,
-			'process_webhook_job'   => ProcessWebhook_Test_Job::class,
+			'process_webhook_job'   => ProcessHook_Test_Job::class,
 		]);
 
 		(new WebhookProcessor($request, $webhookConfig))->process();
@@ -35,14 +37,30 @@ class WebhookController extends BaseController
 	{
 		$webhookConfig = new \Spatie\WebhookClient\WebhookConfig([
 			'name'                  => 'pusher',
-			'signing_secret'        => config('broadcasting.connections.pusher.secret'),
+			'signing_secret'        => config('hooks.pusher.signing-key'),
 			'signature_header_name' => 'X-Pusher-Signature',
 			'signature_validator'   => DefaultSignatureValidator::class,
 			'webhook_profile'       => ProcessEverythingWebhookProfile::class,
 			'webhook_model'         => WebhookCall::class,
-			'process_webhook_job'   => ProcessWebhook_Pusher_Job::class,
+			'process_webhook_job'   => ProcessHook_Pusher_Job::class,
 		]);
 
 		(new WebhookProcessor($request, $webhookConfig))->process();
 	}
+
+	public function receive_stripe(Request $request)
+	{
+		$webhookConfig = new \Spatie\WebhookClient\WebhookConfig([
+			'name'                  => 'pusher',
+			'signing_secret'        => config('hooks.stripe.signing-key'),
+			'signature_header_name' => 'Stripe-Signature',
+			'signature_validator'   => StripeSignatureValidator::class,
+			'webhook_profile'       => ProcessEverythingWebhookProfile::class,
+			'webhook_model'         => WebhookCall::class,
+			'process_webhook_job'   => ProcessHook_Stripe_Job::class,
+		]);
+
+		(new WebhookProcessor($request, $webhookConfig))->process();
+	}
+
 }

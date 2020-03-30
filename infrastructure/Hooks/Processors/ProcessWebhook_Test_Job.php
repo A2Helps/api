@@ -1,10 +1,10 @@
 <?php
 
-namespace Infrastructure\Webhooks\Processors;
+namespace Infrastructure\Hooks\Processors;
 
 use \Spatie\WebhookClient\ProcessWebhookJob as SpatieProcessWebhookJob;
 
-class ProcessWebhook_Test_Job extends SpatieProcessWebhookJob
+class ProcessHook_Test_Job extends SpatieProcessWebhookJob
 {
 	public function handle()
 	{

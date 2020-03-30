@@ -1,11 +1,11 @@
 <?php
 
-namespace Infrastructure\Webhooks\Processors;
+namespace Infrastructure\Hooks\Processors;
 
 use Illuminate\Support\Facades\Log;
 use \Spatie\WebhookClient\ProcessWebhookJob as SpatieProcessWebhookJob;
 
-class ProcessWebhook_Pusher_Job extends SpatieProcessWebhookJob
+class ProcessHook_Pusher_Job extends SpatieProcessWebhookJob
 {
 	public function handle()
 	{

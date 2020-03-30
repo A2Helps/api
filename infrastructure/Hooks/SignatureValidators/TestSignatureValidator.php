@@ -1,6 +1,6 @@
 <?php
 
-namespace Infrastructure\Webhooks\SignatureValidators;
+namespace Infrastructure\Hooks\SignatureValidators;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
