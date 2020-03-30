@@ -74,6 +74,24 @@ class DonationService
 		return;
 	}
 
+	public function donationCompleted(string $sessionId): Donation
+	{
+		$lc = new LogContext(['co_session' => $sessionId]);
+		$donation = Donation::where('co_session', $sessionId)->first();
+
+		if (empty($donation)) {
+			$lc->warning('co_session was not found');
+			throw new DonationNotFoundException();
+		}
+
+		$lc->info('donation completed', ['donation_id' => $donation->id]);
+
+		$donation->completed = true;
+		$donation->save();
+
+		return $donation;
+	}
+
 	protected function getRequestedDonation($id): Donation
 	{
 		$id = expand_uuid($id);
