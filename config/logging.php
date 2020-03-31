@@ -41,6 +41,11 @@ return [
 			'ignore_exceptions' => false,
 		],
 
+		'container' => [
+			'driver' => 'stack',
+			'channels' => ['stdout']
+		],
+
 		'single' => [
 			'driver' => 'single',
 			'path' => storage_path('logs/laravel.log'),
@@ -69,6 +74,15 @@ return [
 			'handler_with' => [
 				'host' => env('PAPERTRAIL_URL'),
 				'port' => env('PAPERTRAIL_PORT'),
+			],
+		],
+
+		'stdout' => [
+			'driver' => 'monolog',
+			'handler' => StreamHandler::class,
+			'formatter' => env('LOG_STDOUT_FORMATTER'),
+			'with' => [
+				'stream' => 'php://stdout',
 			],
 		],
 
