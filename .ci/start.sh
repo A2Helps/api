@@ -6,14 +6,14 @@ set -ef -o pipefail
 # load nginx conf
 cp /app/.ci/conf/nginx.conf /etc/nginx/nginx.conf
 cp /app/.ci/conf/site.conf /etc/nginx/conf.d/site.conf
-rm /etc/nginx/sites-available/default.conf
-rm /etc/nginx/sites-available/default-ssl.conf
+rm -f /etc/nginx/sites-available/default.conf
+rm -f /etc/nginx/sites-available/default-ssl.conf
 
 # load fpm conf
 cp /app/.ci/conf/fpm.conf /usr/local/etc/php-fpm.conf
 cp /app/.ci/conf/www.conf /usr/local/etc/php-fpm.d/www.conf
 cp /app/.ci/conf/fpm.ini /usr/local/etc/php/conf.d/docker-vars.ini
-rm /usr/local/etc/php-fpm.d/www.conf.default
+rm -f /usr/local/etc/php-fpm.d/www.conf.default
 
 mkdir -p /tmp/._spool/nginx/client_body_cache
 chown -R nginx: /tmp/._spool/nginx
@@ -32,6 +32,7 @@ if [ ! -z "$PUID" ]; then
   adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx -u ${PUID} nginx
 else
   if [ -z "$SKIP_CHOWN" ]; then
+    echo "setting ownership"
     chown -Rf nginx.nginx /app
   fi
 fi
