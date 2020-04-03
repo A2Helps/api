@@ -12,7 +12,7 @@ class StripeService
 	{
 		$baseUrl = config('app.web.url');
 
-		$session = \Stripe\Checkout\Session::create([
+		$session = Session::create([
 			'payment_method_types' => ['card'],
 			'billing_address_collection' => 'required',
 			'submit_type' => 'donate',
@@ -36,6 +36,17 @@ class StripeService
 		  ]);
 
 		Log::info('created stripe checkout session', ['session_id' => $session->id]);
+
+		return $session;
+	}
+
+	public function retrieveDonation(Donation $donation): ?Session
+	{
+		if (empty($donation->co_session)) {
+			return null;
+		}
+
+		$session = Session::retrieve($donation->co_session);
 
 		return $session;
 	}

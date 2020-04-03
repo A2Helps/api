@@ -12,6 +12,8 @@ use Api\Users\Events\UserWasDeleted;
 use Api\Users\Events\UserWasUpdated;
 use Api\Users\Exceptions\UserNotFoundException;
 use Api\Users\Models\User;
+use Illuminate\Support\Arr;
+use Kreait\Laravel\Firebase\Facades\FirebaseAuth;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class UserService
@@ -52,37 +54,25 @@ class UserService
 		return $user;
 	}
 
-	// public function create($data)
-	// {
-	// 	$user = $this->repository->create($data);
-	// 	Log::info('created user', ['user_id' => $user->id]);
+	public function createRecipientUser($data): User
+	{
+		$user = User::create(
+			Arr::only($data, ['phone', 'name_first', 'name_last'])
+		);
 
-	// 	$this->dispatcher->dispatch(new UserWasCreated($user));
+		Log::debug('created user', ['user_id' => $user->id]);
 
-	// 	return $user;
-	// }
+		$fUser = FirebaseAuth::createUser([
+			'phoneNumber' => sprintf('+1%d', substr($data['phone'], 0, 10)),
+		]);
 
-	// public function update($userId, array $data)
-	// {
-	// 	$user = $this->getRequestedUser($userId);
+		$user->fbid = $fUser->uid;
+		$user->save();
 
-	// 	$this->repository->update($user, $data);
-	// 	Log::info('updated user', ['user_id' => $user->id]);
+		Log::info('created user', ['user_id' => $user->id, 'fbid' => $user->fbid]);
 
-	// 	$this->dispatcher->dispatch(new UserWasUpdated($user));
-
-	// 	return $user;
-	// }
-
-	// public function delete($userId)
-	// {
-	// 	$user = $this->getRequestedUser($userId);
-
-	// 	$this->repository->delete($userId);
-	// 	Log::info('deleted user', ['user_id' => $userId]);
-
-	// 	$this->dispatcher->dispatch(new UserWasDeleted($user));
-	// }
+		return $user;
+	}
 
 	protected function getRequestedUser($id): User
 	{

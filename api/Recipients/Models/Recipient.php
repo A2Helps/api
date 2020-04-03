@@ -1,20 +1,20 @@
 <?php
 
-namespace Api\Users\Models;
+namespace Api\Recipients\Models;
 
-use Api\OrgMembers\Models\OrgMember;
+use Api\Codes\Models\Code;
 use Infrastructure\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Infrastructure\Models\ModelTransformer;
 use Infrastructure\Support\Contracts\Transformable;
 
-class User extends Model implements Transformable
+class Recipient extends Model implements Transformable
 {
 	use ModelTransformer;
 	use SoftDeletes;
 
 	protected $keyType = 'string';
-	public $table = 'user';
+	public $table = 'recipient';
 
 	/**
 	 * The attributes that are mass assignable.
@@ -22,17 +22,16 @@ class User extends Model implements Transformable
 	 * @var array
 	 */
 	protected $fillable = [
-		'email',
 		'phone',
-		'name_first',
-		'name_last',
+		'name',
+		'user_id',
 	];
 
 	protected $casts = [
-		'phone' => 'string',
+		'phone' => 'string'
 	];
 
-	public function orgMember() {
-		return $this->hasOne(OrgMember::class);
+	public function codes() {
+		return $this->hasMany(Code::class);
 	}
 }

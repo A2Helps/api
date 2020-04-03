@@ -4,6 +4,7 @@ namespace Api\Codes\Models;
 
 use Api\OrgMembers\Models\OrgMember;
 use Api\Orgs\Models\Org;
+use Api\Recipients\Models\Recipient;
 use Illuminate\Database\Eloquent\Builder;
 use Infrastructure\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -35,6 +36,7 @@ class Code extends Model
 		'printed_at',
 		'distributed',
 		'distributed_at',
+		'recipeint_id',
 	];
 
 	protected $casts = [
@@ -57,6 +59,7 @@ class Code extends Model
 	protected $appends = [
 		'distributing',
 		'used',
+		'claimed',
 	];
 
 	public function setPrintedAttribute($value) {
@@ -82,7 +85,7 @@ class Code extends Model
 		return $this->email || $this->phone || $this->printed;
 	}
 
-	public function scopeOfUsed(Builder $query, $used): Builder {
+	public function scopeUsed(Builder $query, $used): Builder {
 		$used = (bool) $used;
 
 		if ($used) {
@@ -99,11 +102,29 @@ class Code extends Model
 		return $query->whereNull('email')->whereNull('phone')->where('printed', false);
 	}
 
+	public function getClaimedAttribute() {
+		return $this->recipient_id !== null;
+	}
+
+	public function scopeClaimed(Builder $query, $claimed): Builder {
+		$claimed = (bool) $claimed;
+
+		if ($claimed) {
+			return $query->whereNotNull('recipient_id');
+		}
+
+		return $query->whereNull('recipient_id');
+	}
+
 	public function org() {
 		return $this->belongsTo(Org::class);
 	}
 
 	public function org_member() {
 		return $this->belongsTo(OrgMember::class);
+	}
+
+	public function recipient() {
+		return $this->belongsTo(Recipient::class);
 	}
 }

@@ -3,6 +3,7 @@
 namespace Api\Codes;
 
 use Api\Codes\Requests\BulkUpdateRequest;
+use Api\Codes\Requests\VerifyRequest;
 use Illuminate\Http\Request;
 use Infrastructure\Http\Controller as BaseController;
 use Api\Codes\Services\CodeService;
@@ -40,5 +41,12 @@ class Controller extends BaseController
 		$codes = $request->get('codes', []);
 
 		return CodeTransformer::collection($this->srvc->bulkUpdate($codes, $data));
+	}
+
+	public function verify(VerifyRequest $request)
+	{
+		$data = $request->all();
+
+		return $this->srvc->verify($data['code'], $data['phone']);
 	}
 }

@@ -188,6 +188,7 @@ return [
 		Api\Donations\DonationServiceProvider::class,
 		Api\OrgMembers\OrgMemberServiceProvider::class,
 		Api\Orgs\OrgServiceProvider::class,
+		Api\Recipients\RecipientServiceProvider::class,
 		Api\Users\UserServiceProvider::class,
 	],
 

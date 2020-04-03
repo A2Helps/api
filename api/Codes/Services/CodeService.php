@@ -11,6 +11,10 @@ use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Api\Codes\Exceptions\CodeNotFoundException;
 use Api\Codes\Models\Code;
+use Api\Recipients\Exceptions\RecipientNotFoundException;
+use Api\Recipients\RecipientFacade;
+use Api\Recipients\Services\RecipientService;
+use Api\Users\UserFacade;
 use Cumulati\Monolog\LogContext;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -42,6 +46,10 @@ class CodeService extends BaseService
 	{
 		$user = Auth::user();
 		Log::debug('fetching all codes');
+
+		if (empty($user->orgMember)) {
+			return collect([]);
+		}
 
 		return QueryBuilder::for(Code::where('org_id', $user->orgMember->org_id))
 			->allowedFilters([
@@ -140,6 +148,52 @@ class CodeService extends BaseService
 		});
 
 		return $codes;
+	}
+
+	/**
+	 * responses:
+	 * 404 - code not found
+	 * 401 - code.claimed | code is already claimed
+	 * 401 - recipient.duplicate | recipient already has claimed a code
+	 */
+	public function verify(string $code, string $phone): void
+	{
+		$c = $this->getByCode($code);
+
+		// check if the code is claimed
+		if ($c->claimed) {
+			throw new UnauthorizedException(
+				new Exception('code.claimed')
+			);
+		}
+
+		try {
+			// check if we already have a recipient with this phone
+			RecipientFacade::getByPhone($phone);
+
+			throw new UnauthorizedException(
+				new Exception('recipient.duplicate')
+			);
+		} catch (RecipientNotFoundException $e) {}
+
+		DB::transaction(function() use ($c, $phone) {
+			$n = explode(' ', $c->name, 1);
+
+			$user = UserFacade::createRecipientUser([
+				'phone'      => $phone,
+				'name_first' => $n[0] ?? null,
+				'name_last'  => $n[1] ?? null,
+			]);
+
+			$r = RecipientFacade::create([
+				'phone'   => $phone,
+				'name'    => $c->name,
+				'user_id' => $user->id,
+			]);
+
+			$c->recipient_id = $r->id;
+			$c->save();
+		});
 	}
 
 	private function getRequestedCode($id): Code
