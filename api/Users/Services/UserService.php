@@ -54,6 +54,9 @@ class UserService
 		return $user;
 	}
 
+	/**
+	 * @throws Kreait\\Firebase\\Exception\\Auth\\PhoneNumberExists
+	 */
 	public function createRecipientUser($data): User
 	{
 		$user = User::create(

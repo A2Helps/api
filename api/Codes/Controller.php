@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Infrastructure\Http\Controller as BaseController;
 use Api\Codes\Services\CodeService;
 use Api\Codes\Transformers\CodeTransformer;
+use Infrastructure\Exceptions\UnauthorizedException;
 
 class Controller extends BaseController
 {
@@ -47,6 +48,19 @@ class Controller extends BaseController
 	{
 		$data = $request->all();
 
-		return $this->srvc->verify($data['code'], $data['phone']);
+		try {
+			$this->srvc->verify($data['code'], $data['phone']);
+			return $this->response(['success' => true]);
+		}
+		catch (UnauthorizedException $e) {
+			$r = [
+				'success' => false,
+				'error' => [
+					'code' => $e->getMessage(),
+				]
+			];
+
+			return $this->response($r, 400);
+		}
 	}
 }

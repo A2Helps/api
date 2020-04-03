@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Infrastructure\Exceptions\UnauthorizedException;
 use Infrastructure\Services\BaseService;
+use Kreait\Firebase\Exception\Auth\PhoneNumberExists;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class CodeService extends BaseService
@@ -155,6 +156,7 @@ class CodeService extends BaseService
 	 * 404 - code not found
 	 * 401 - code.claimed | code is already claimed
 	 * 401 - recipient.duplicate | recipient already has claimed a code
+	 * @throws UnauthorizedException
 	 */
 	public function verify(string $code, string $phone): void
 	{
@@ -163,7 +165,7 @@ class CodeService extends BaseService
 		// check if the code is claimed
 		if ($c->claimed) {
 			throw new UnauthorizedException(
-				new Exception('code.claimed')
+				new Exception('verify.code.claimed')
 			);
 		}
 
@@ -172,18 +174,24 @@ class CodeService extends BaseService
 			RecipientFacade::getByPhone($phone);
 
 			throw new UnauthorizedException(
-				new Exception('recipient.duplicate')
+				new Exception('verify.recipient.duplicate')
 			);
 		} catch (RecipientNotFoundException $e) {}
 
 		DB::transaction(function() use ($c, $phone) {
 			$n = explode(' ', $c->name, 1);
 
-			$user = UserFacade::createRecipientUser([
-				'phone'      => $phone,
-				'name_first' => $n[0] ?? null,
-				'name_last'  => $n[1] ?? null,
-			]);
+			try {
+				$user = UserFacade::createRecipientUser([
+					'phone'      => $phone,
+					'name_first' => $n[0] ?? null,
+					'name_last'  => $n[1] ?? null,
+				]);
+			} catch (PhoneNumberExists $e) {
+				throw new UnauthorizedException(
+					new Exception('veryify.recipient.exists')
+				);
+			}
 
 			$r = RecipientFacade::create([
 				'phone'   => $phone,
