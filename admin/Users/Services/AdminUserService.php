@@ -10,8 +10,10 @@ use Illuminate\Support\Facades\Log;
 use Api\Users\Exceptions\UserNotFoundException;
 use Api\Users\Models\User;
 use Api\Users\Services\UserService;
+use Cumulati\Monolog\LogContext;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Kreait\Laravel\Firebase\Facades\FirebaseAuth;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -99,10 +101,39 @@ class AdminUserService extends UserService
 
 	public function delete($userId): void
 	{
-		$this->getRequestedUser($userId);
+		$user = $this->getRequestedUser($userId);
 
-		$this->repository->delete($userId);
-		Log::info('deleted user', ['user_id' => $userId]);
+		$lc = new LogContext(['user_id' => $userId]);
+		$lc->info('deleting user');
+
+		DB::transaction(function () use (&$user, $lc) {
+			if ($user->fbid) {
+				$lc->info('deleting firebase user', ['fbid' => $user->fbid]);
+				FirebaseAuth::deleteUser($user->fbid);
+			}
+
+			$user->recipients->each(function($r) use ($lc) {
+				$r->codes->each(function($c) use ($lc) {
+					$lc->info('removing recipient from code', ['recipient_id' => $c->recipeint_id, 'code_id' => $c->id]);
+					$c->recipient_id = null;
+					$c->save();
+				});
+
+				$lc->info('deleting recipient', ['recipient_id' => $r->id]);
+				$r->forceDelete();
+			});
+
+			$user->forceDelete();
+		});
+
+		$lc->info('deleted user');
+	}
+
+	public function deleteByPhone(string $phone): void
+	{
+		$user = $this->getByPhone($phone);
+
+		$this->delete($user->id);
 	}
 
 	public function createAuthToken($id): array

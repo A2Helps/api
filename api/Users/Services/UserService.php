@@ -54,6 +54,19 @@ class UserService
 		return $user;
 	}
 
+	public function getByPhone($phone): User
+	{
+		Log::debug('fetching user by phone', ['phone' => $phone]);
+
+		$user = QueryBuilder::for(User::where('phone', $phone))->first();
+
+		if (empty($user)) {
+			throw new UserNotFoundException();
+		}
+
+		return $user;
+	}
+
 	/**
 	 * @throws Kreait\\Firebase\\Exception\\Auth\\PhoneNumberExists
 	 */

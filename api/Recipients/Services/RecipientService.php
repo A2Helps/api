@@ -43,7 +43,7 @@ class RecipientService
 	public function create($data): Recipient
 	{
 		$recipient = Recipient::create(
-			Arr::only($data, ['email', 'phone', 'name_first', 'name_last'])
+			Arr::only($data, ['user_id', 'email', 'phone', 'name_first', 'name_last'])
 		);
 
 		Log::info('created recipient', ['recipient_id' => $recipient->id]);

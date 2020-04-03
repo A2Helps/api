@@ -3,6 +3,7 @@
 namespace Api\Users\Models;
 
 use Api\OrgMembers\Models\OrgMember;
+use Api\Recipients\Models\Recipient;
 use Infrastructure\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Infrastructure\Models\ModelTransformer;
@@ -34,5 +35,9 @@ class User extends Model implements Transformable
 
 	public function orgMember() {
 		return $this->hasOne(OrgMember::class);
+	}
+
+	public function recipients() {
+		return $this->hasMany(Recipient::class);
 	}
 }

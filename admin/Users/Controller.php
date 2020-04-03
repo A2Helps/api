@@ -47,4 +47,9 @@ class Controller extends BaseController
 
 		return $this->srvc->createAuthToken($id);
 	}
+
+	public function deleteByPhone($phone, Request $request)
+	{
+		return $this->srvc->deleteByPhone($phone);
+	}
 }
