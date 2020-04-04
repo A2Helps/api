@@ -3,6 +3,7 @@
 namespace Api\Donations\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class DonationTransformer extends JsonResource
@@ -19,6 +20,13 @@ class DonationTransformer extends JsonResource
 
 		$data['id'] = shorten_uuid($data['id']);
 
-		return $data;
+		return Arr::only($data, [
+			'id',
+			'amount',
+			'co_session',
+			'public',
+			'public_name',
+			'created_at',
+		]);
 	}
 }

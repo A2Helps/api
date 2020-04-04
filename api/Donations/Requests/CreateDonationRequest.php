@@ -14,7 +14,12 @@ class CreateDonationRequest extends ApiRequest
 	public function rules(): array
 	{
 		return [
-			'amount' => 'required|int',
+			'amount'      => 'required|int',
+			'wired'       => 'bool',
+			'wired_from'  => 'nullable|string',
+			'public'      => 'bool',
+			'public_from' => 'nullable|string',
+			'email'       => 'nullable|email|required_if:wired,true',
 		];
 	}
 

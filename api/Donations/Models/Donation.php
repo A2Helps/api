@@ -26,11 +26,21 @@ class Donation extends Model
 		'canceled_at',
 		'completed',
 		'completed_at',
+		'public',
+		'public_name',
+		'wired',
+		'wired_from',
+		'settled',
+		'settled_at',
+		'email',
 	];
 
 	protected $casts = [
-		'amount' => 'int',
+		'amount'   => 'int',
 		'canceled' => 'bool',
+		'wired'    => 'bool',
+		'public'   => 'bool',
+		'settled'  => 'bool',
 	];
 
 	protected $dates = [
@@ -39,6 +49,7 @@ class Donation extends Model
 		'deleted_at',
 		'canceled_at',
 		'completed_at',
+		'settled_at',
 	];
 
 	public function setCanceledAttribute($value) {
@@ -49,5 +60,10 @@ class Donation extends Model
 	public function setCompletedAttribute($value) {
 		$this->touchTimestamp($value, 'completed');
 		$this->attributes['completed'] = $value;
+	}
+
+	public function setSettledAttribute($value) {
+		$this->touchTimestamp($value, 'settled');
+		$this->attributes['settled'] = $value;
 	}
 }

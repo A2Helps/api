@@ -12,6 +12,7 @@ use Api\Donations\Exceptions\DonationNotFoundException;
 use Api\Donations\Models\Donation;
 use Cumulati\Monolog\LogContext;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\ValidationException;
 use Infrastructure\Exceptions\UnauthorizedException;
 use Infrastructure\Stripe\StripeFacade;
 
@@ -35,7 +36,14 @@ class DonationService
 
 	public function create($data): Donation
 	{
-		$data = Arr::only($data, ['amount']);
+		$data = Arr::only($data, [
+			'amount',
+			'public',
+			'public_name',
+			'wired',
+			'wired_from',
+			'email',
+		]);
 
 		$lc = new LogContext(['amount' => $data['amount']]);
 		$lc->debug('creating donation');
