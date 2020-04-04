@@ -183,6 +183,7 @@ return [
 		Admin\Orgs\OrgServiceProvider::class,
 		Admin\OrgMembers\OrgMemberServiceProvider::class,
 		Admin\Users\UserServiceProvider::class,
+		Admin\Merchants\MerchantServiceProvider::class,
 
 		Api\Codes\CodeServiceProvider::class,
 		Api\Donations\DonationServiceProvider::class,
@@ -190,6 +191,7 @@ return [
 		Api\Orgs\OrgServiceProvider::class,
 		Api\Recipients\RecipientServiceProvider::class,
 		Api\Users\UserServiceProvider::class,
+		Api\Merchants\MerchantServiceProvider::class,
 	],
 
 	/*
