@@ -192,6 +192,8 @@ return [
 		Api\Recipients\RecipientServiceProvider::class,
 		Api\Users\UserServiceProvider::class,
 		Api\Merchants\MerchantServiceProvider::class,
+
+		Api\Donations\DonationEventProvider::class,
 	],
 
 	/*

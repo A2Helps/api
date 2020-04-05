@@ -2,6 +2,7 @@
 
 namespace Api\Donations\Services;
 
+use Api\Donations\Events\Completed;
 use Exception;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Events\Dispatcher;
@@ -82,7 +83,7 @@ class DonationService
 		return;
 	}
 
-	public function donationCompleted(string $sessionId): Donation
+	public function donationCompleted(string $sessionId, string $email): Donation
 	{
 		$lc = new LogContext(['co_session' => $sessionId]);
 		$donation = Donation::where('co_session', $sessionId)->first();
@@ -94,8 +95,11 @@ class DonationService
 
 		$lc->info('donation completed', ['donation_id' => $donation->id]);
 
+		$donation->email = $email;
 		$donation->completed = true;
 		$donation->save();
+
+		$this->dispatcher->dispatch(new Completed($donation));
 
 		return $donation;
 	}
