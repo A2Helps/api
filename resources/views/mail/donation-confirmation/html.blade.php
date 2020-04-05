@@ -29,7 +29,7 @@ Share that you donated to A2 Helps on social media!</strong></p>
                     <tbody>
                         <tr>
                             <td align="center" valign="middle" class="mcnButtonContent" style="font-family: Helvetica; font-size: 18px; padding: 18px;">
-                                <a class="mcnButton " title="Share Now" href="https://a2helps.com" target="_blank" style="font-weight: bold;letter-spacing: -0.5px;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;">Share Now</a>
+                                <a class="mcnButton " title="Share Now" href="https://a2helps.com/donation/success" target="_blank" style="font-weight: bold;letter-spacing: -0.5px;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;">Share Now</a>
                             </td>
                         </tr>
                     </tbody>
