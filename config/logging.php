@@ -43,7 +43,7 @@ return [
 
 		'container' => [
 			'driver' => 'stack',
-			'channels' => ['stdout']
+			'channels' => ['stdout', 'daily']
 		],
 
 		'single' => [
