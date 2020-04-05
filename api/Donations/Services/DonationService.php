@@ -10,6 +10,7 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Api\Donations\Exceptions\DonationNotFoundException;
+use Api\Donations\Jobs\SendWireInstructions;
 use Api\Donations\Models\Donation;
 use Cumulati\Monolog\LogContext;
 use Illuminate\Support\Arr;
@@ -54,12 +55,22 @@ class DonationService
 		$lc->addContext(['donation_id' => $donation->id]);
 		$lc->info('created donation');
 
-		$session = StripeFacade::createCheckout($donation);
+		if (! $donation->wired) {
+			$session = StripeFacade::createCheckout($donation);
+			$donation->co_session = $session->id;
+		}
 
-		$donation->co_session = $session->id;
 		$donation->save();
 
-		$lc->info('created stripe checkout session for donation', ['session_id' => $donation->co_session]);
+		$lc->info('created stripe checkout session for donation', [
+			'session_id' => $donation->co_session,
+			'wired' => $donation->wired,
+		]);
+
+		if ($donation->wired) {
+			// $this->dispatcher->dispatch(new BAHSJDF($donation));
+			dispatch(new SendWireInstructions($donation));
+		}
 
 		return $donation;
 	}

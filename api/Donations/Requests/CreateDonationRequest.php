@@ -16,9 +16,9 @@ class CreateDonationRequest extends ApiRequest
 		return [
 			'amount'      => 'required|int',
 			'wired'       => 'bool',
-			'wired_from'  => 'nullable|string',
+			'wired_from'  => 'nullable|string|required_if:wired,true',
 			'public'      => 'bool',
-			'public_from' => 'nullable|string',
+			'public_name' => 'nullable|string|required_if:public,true',
 			'email'       => 'nullable|email|required_if:wired,true',
 		];
 	}
@@ -26,7 +26,10 @@ class CreateDonationRequest extends ApiRequest
 	public function attributes(): array
 	{
 		return [
-			'amount' => 'The donation amount in USD cents',
+			'amount' => 'The donation amount in USD cents.',
+			'email' => 'Email address of the contributor. Required if wired.',
+			'public_name' => 'Name to list publically. Required if public.',
+			'wired_from' => 'Name of the person who created wire, used to track receipt of wire. Required if wired.',
 		];
 	}
 }

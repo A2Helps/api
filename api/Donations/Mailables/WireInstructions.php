@@ -8,7 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Api\Donations\Models\Donation;
 use Api\Users\Models\User;
 
-class Confirmation extends Mailable
+class WireInstructions extends Mailable
 {
 	use SerializesModels;
 
@@ -21,7 +21,7 @@ class Confirmation extends Mailable
 	 */
 	public $urls;
 
-	public $subject = 'A2 Helps - Thank you for donating!';
+	public $subject = 'WIP | A2 Helps - Wire Instructions';
 
 	/**
 	 * Create a new message instance.
@@ -40,9 +40,9 @@ class Confirmation extends Mailable
 	 */
 	public function build()
 	{
-		// return $this->view('mail.donation-confirmation.text')
+		// return $this->view('mail.wire-instructions.html')
 		return $this
-			->text('mail.donation-confirmation.text')
+			->text('mail.wire-instructions.text')
 			->from(
 				'thankyou@e.a2helps.com',
 				'A2 Helps'
