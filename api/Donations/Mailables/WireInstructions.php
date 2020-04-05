@@ -21,7 +21,7 @@ class WireInstructions extends Mailable
 	 */
 	public $urls;
 
-	public $subject = 'WIP | A2 Helps - Wire Instructions';
+	public $subject = 'A2 Helps Donation - Wire Instructions';
 
 	/**
 	 * Create a new message instance.
