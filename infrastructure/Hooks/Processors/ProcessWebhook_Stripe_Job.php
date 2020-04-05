@@ -28,9 +28,11 @@ class ProcessHook_Stripe_Job extends SpatieProcessWebhookJob
 		switch ($event->type) {
 			case 'checkout.session.completed':
 				$id = $event->data->object->id;
+				$cus = $event->data->object->customer;
 				$email = $event->data->object->customer_email;
-				$lc->info('checkout session was completed', ['co_session' => $id, 'email' => $email]);
-				DonationFacade::donationCompleted($id, $email);
+
+				$lc->info('checkout session was completed', ['co_session' => $id, 'email' => $email, 'cus' => $cus]);
+				DonationFacade::donationCompleted($id, $email, $cus);
 				break;
 
 			case 'charge.captured':

@@ -17,6 +17,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Infrastructure\Exceptions\UnauthorizedException;
 use Infrastructure\Stripe\StripeFacade;
+use Infrastructure\Stripe\StripeService;
 
 class DonationService
 {
@@ -94,7 +95,7 @@ class DonationService
 		return;
 	}
 
-	public function donationCompleted(string $sessionId, string $email): Donation
+	public function donationCompleted(string $sessionId, string $email = null, string $cus = null): Donation
 	{
 		$lc = new LogContext(['co_session' => $sessionId]);
 		$donation = Donation::where('co_session', $sessionId)->first();
@@ -102,6 +103,16 @@ class DonationService
 		if (empty($donation)) {
 			$lc->warning('co_session was not found');
 			throw new DonationNotFoundException();
+		}
+
+		if (empty($email)) {
+			$customer = StripeService::retrieveCustomer($cus);
+
+			if (empty($customer)) {
+				throw new Exception('Customer email not found');
+			}
+
+			$email = $customer->email;
 		}
 
 		$lc->info('donation completed', ['donation_id' => $donation->id]);

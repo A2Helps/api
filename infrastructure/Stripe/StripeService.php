@@ -5,6 +5,7 @@ namespace Infrastructure\Stripe;
 use Api\Donations\Models\Donation;
 use Illuminate\Support\Facades\Log;
 use Stripe\Checkout\Session;
+use Stripe\Customer;
 
 class StripeService
 {
@@ -49,5 +50,10 @@ class StripeService
 		$session = Session::retrieve($donation->co_session);
 
 		return $session;
+	}
+
+	public function retrieveCustomer(string $cus): ?Customer
+	{
+		return Customer::retrieve($cus);
 	}
 }
