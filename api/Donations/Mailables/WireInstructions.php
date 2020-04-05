@@ -6,7 +6,6 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
 use Api\Donations\Models\Donation;
-use Api\Users\Models\User;
 use Illuminate\Support\Facades\Log;
 
 class WireInstructions extends Mailable
@@ -43,8 +42,7 @@ class WireInstructions extends Mailable
 	{
 		Log::debug('built instructions');
 
-		// return $this->view('mail.wire-instructions.html')
-		return $this
+		return $this->view('mail.wire-instructions.html')
 			->text('mail.wire-instructions.text')
 			->from(
 				'thankyou@e.a2helps.com',

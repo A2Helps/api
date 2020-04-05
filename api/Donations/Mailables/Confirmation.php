@@ -40,8 +40,7 @@ class Confirmation extends Mailable
 	 */
 	public function build()
 	{
-		// return $this->view('mail.donation-confirmation.text')
-		return $this
+		return $this->view('mail.donation-confirmation.html')
 			->text('mail.donation-confirmation.text')
 			->from(
 				'thankyou@e.a2helps.com',
