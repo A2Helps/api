@@ -49,7 +49,6 @@ class SendWireInstructions extends QueuedJob
 			$this->donation,
 		);
 
-		Mail::to($this->donation->email)
-			->send($mailable);
+		Mail::send($mailable);
 	}
 }

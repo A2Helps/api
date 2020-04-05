@@ -7,6 +7,7 @@ use Infrastructure\Http\Controller as BaseController;
 use Api\Donations\Requests\CreateDonationRequest;
 use Api\Donations\Services\DonationService;
 use Api\Donations\Transformers\DonationTransformer;
+use Illuminate\Support\Arr;
 
 class Controller extends BaseController
 {
@@ -27,6 +28,8 @@ class Controller extends BaseController
 	public function update($id, Request $request)
 	{
 		$data = $request->all();
+
+		Arr::forget($data, ['completed']);
 
 		$this->srvc->update($id, $data);
 		return;
