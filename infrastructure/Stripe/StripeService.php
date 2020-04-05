@@ -32,7 +32,7 @@ class StripeService
 			// 'cancel_url' => 'https://example.com/cancel?session_id={CHECKOUT_SESSION_ID}',
 
 			'success_url' => sprintf('%s/donation/success', $baseUrl),
-			'cancel_url' => sprintf('%s/donation/calcel?donationid=%s', $baseUrl, shorten_uuid($donation->id)),
+			'cancel_url' => sprintf('%s/donation/cancel?donationid=%s', $baseUrl, shorten_uuid($donation->id)),
 		  ]);
 
 		Log::info('created stripe checkout session', ['session_id' => $session->id]);
