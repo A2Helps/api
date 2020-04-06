@@ -5,7 +5,7 @@
 @section('body')
 <h3><strong id="docs-internal-guid-3b3e7376-7fff-7c1d-6c68-7cd70630b86a">Thank you for donating to A2 Helps! </strong></h3>
 
-<p dir="ltr"><strong id="docs-internal-guid-3b3e7376-7fff-7c1d-6c68-7cd70630b86a">Your contribution is supporting Ann Arbor’s local businesses and the community heroes on the front lines of this crisis, every day. </strong><br>
+<p dir="ltr"><strong id="docs-internal-guid-3b3e7376-7fff-7c1d-6c68-7cd70630b86a">Your contribution of ${{ money_human($donation->amount) }} is supporting Ann Arbor’s local businesses and the community heroes on the front lines of this crisis, every day. </strong><br>
 <br>
 <strong>OPT IN: We will be honoring your generosity on our website by listing the name you provided with your donation.&nbsp;</strong><br>
 <br>

@@ -1,4 +1,4 @@
-Thank you for donating to A2 Helps! Your contribution is supporting Ann Arbor’s local businesses and the community heroes on the front lines of this crisis, every day.
+Thank you for donating to A2 Helps! Your contribution of ${{ money_human($donation->amount) }} is supporting Ann Arbor’s local businesses and the community heroes on the front lines of this crisis, every day.
 
 We will be honoring your generosity on our website by listing the name you provided with your donation.
 
