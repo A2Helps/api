@@ -106,7 +106,7 @@ class DonationService
 		}
 
 		if (empty($email)) {
-			$customer = StripeService::retrieveCustomer($cus);
+			$customer = StripeFacade::retrieveCustomer($cus);
 
 			if (empty($customer)) {
 				throw new Exception('Customer email not found');
