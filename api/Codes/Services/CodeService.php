@@ -171,7 +171,12 @@ class CodeService extends BaseService
 
 		try {
 			// check if we already have a recipient with this phone
-			RecipientFacade::getByPhone($phone);
+			$r = RecipientFacade::getByPhone($phone);
+
+			// if recipient is already created, but is user matching code then verification passes
+			if ($r->id === $c->recipient_id) {
+				return;
+			}
 
 			throw new UnauthorizedException(
 				new Exception('verify.recipient.duplicate')
