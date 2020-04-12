@@ -14,6 +14,7 @@ use Api\Donations\Jobs\SendWireInstructions;
 use Api\Donations\Models\Donation;
 use Cumulati\Monolog\LogContext;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Infrastructure\Exceptions\UnauthorizedException;
 use Infrastructure\Stripe\StripeFacade;
@@ -35,6 +36,23 @@ class DonationService
 		$this->auth = $auth;
 		$this->database = $database;
 		$this->dispatcher = $dispatcher;
+	}
+
+	public function getAll(): Collection
+	{
+		Log::debug('fetching all donations');
+
+		// only return id and public_name
+		return Donation::where('public', true)
+			->where('completed', true)
+			->orderByDesc('amount')
+			->get()
+			->map(function($d) {
+				return [
+					'id' => shorten_uuid($d->id),
+					'public_name' => $d->public_name,
+				];
+			});
 	}
 
 	public function create($data): Donation
