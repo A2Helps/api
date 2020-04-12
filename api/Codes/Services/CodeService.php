@@ -160,28 +160,32 @@ class CodeService extends BaseService
 	 */
 	public function verify(string $code, string $phone): void
 	{
-		$c = $this->getByCode($code);
+		Log::info('attempting to verify code', ['code' => $code, 'phone' => $phone]);
 
-		// check if the code is claimed
-		if ($c->claimed) {
-			throw new UnauthorizedException(
-				new Exception('verify.code.claimed')
-			);
-		}
+		$c = $this->getByCode($code);
+		$r = null;
 
 		try {
 			// check if we already have a recipient with this phone
 			$r = RecipientFacade::getByPhone($phone);
+		} catch (RecipientNotFoundException $e) {}
 
-			// if recipient is already created, but is user matching code then verification passes
-			if ($r->id === $c->recipient_id) {
+		// check if the code is claimed
+		if ($c->claimed) {
+			// if recipient is already created, and is user matching code, then verification passes
+			if (! empty($r) && $r->id === $c->recipient_id) {
 				return;
 			}
 
 			throw new UnauthorizedException(
+				new Exception('verify.code.claimed')
+			);
+		}
+		else if (! empty($r)) {
+			throw new UnauthorizedException(
 				new Exception('verify.recipient.duplicate')
 			);
-		} catch (RecipientNotFoundException $e) {}
+		}
 
 		DB::transaction(function() use ($c, $phone) {
 			$n = explode(' ', $c->name, 1);
