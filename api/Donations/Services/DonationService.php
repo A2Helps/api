@@ -131,11 +131,23 @@ class DonationService
 			}
 
 			$email = $customer->email;
+			$donation->email = $email;
 		}
 
-		$lc->info('donation completed', ['donation_id' => $donation->id]);
+		return $this->completed($donation, $lc);
+	}
 
-		$donation->email = $email;
+	public function completed(Donation $donation, LogContext $lc = null)
+	{
+		if (empty($lc)) {
+			$lc = new LogContext(['donation_id' => $donation->id]);
+		}
+		else {
+			$lc->addContext(['donation_id' => $donation->id]);
+		}
+
+		$lc->info('donation completed', ['donation_id' => $donation->id, 'email' => $donation->email]);
+
 		$donation->completed = true;
 		$donation->save();
 
