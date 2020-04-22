@@ -131,8 +131,9 @@ class DonationService
 			}
 
 			$email = $customer->email;
-			$donation->email = $email;
 		}
+
+		$donation->email = $email;
 
 		return $this->completed($donation, $lc);
 	}

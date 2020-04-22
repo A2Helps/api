@@ -14,7 +14,11 @@ Thank you,
 </strong><br>
 <p dir="ltr"><strong id="docs-internal-guid-3b3e7376-7fff-7c1d-6c68-7cd70630b86a">Your contribution of ${{ money_human($donation->amount) }} is supporting Ann Arbor’s local businesses and the community heroes on the front lines of this crisis, every day. </strong><br>
 <br>
-<strong>OPT IN: We will be honoring your generosity on our website by listing the name you provided with your donation.&nbsp;</strong><br>
+
+@if ($donation->public)
+<strong>We will be honoring your generosity on our website by listing the name you provided with your donation.&nbsp;</strong><br>
+@endif
+
 <br>
 <strong id="docs-internal-guid-0f64de91-7fff-e94e-2869-aa477fbe02ec">Thank you again for your generosity and compassion for the Ann Arbor Community.&nbsp;</strong></p>
 
