@@ -8,8 +8,8 @@ Thank you for donating to A2 Helps! Your contribution of ${{ money_human($donati
 
 @if ($donation->public)
 We will be honoring your generosity on our website by listing the name you provided with your donation.
-@endif
 
+@endif
 Thank you again for your generosity and support for the Ann Arbor Community.
 
 - The A2 Helps Team

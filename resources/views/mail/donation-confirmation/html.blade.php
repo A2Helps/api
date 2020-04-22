@@ -16,10 +16,9 @@ Thank you,
 <br>
 
 @if ($donation->public)
-<strong>We will be honoring your generosity on our website by listing the name you provided with your donation.&nbsp;</strong><br>
+<strong id="docs-internal-guid-0f64de91-7fff-e94e-2869-aa477fbe02ec">We will be honoring your generosity on our website by listing the name you provided with your donation.&nbsp;</strong><br><br>
 @endif
 
-<br>
 <strong id="docs-internal-guid-0f64de91-7fff-e94e-2869-aa477fbe02ec">Thank you again for your generosity and compassion for the Ann Arbor Community.&nbsp;</strong></p>
 
 <p dir="ltr"><strong id="docs-internal-guid-0f64de91-7fff-e94e-2869-aa477fbe02ec">- The A2 Helps Team&nbsp;</strong></p>
