@@ -2,6 +2,7 @@
 
 namespace Api\Codes\Services;
 
+use Admin\Merchants\AdminMerchantFacade;
 use Exception;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Events\Dispatcher;
@@ -11,7 +12,12 @@ use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Api\Codes\Exceptions\CodeNotFoundException;
 use Api\Codes\Models\Code;
+use Api\Merchants\Exceptions\MerchantNotFoundException;
+use Api\OrderCards\Models\OrderCard;
+use Api\OrderCards\OrderCardFacade;
+use Api\Orders\OrderFacade;
 use Api\Recipients\Exceptions\RecipientNotFoundException;
+use Api\Recipients\Models\Recipient;
 use Api\Recipients\RecipientFacade;
 use Api\Recipients\Services\RecipientService;
 use Api\Users\UserFacade;
@@ -209,6 +215,138 @@ class CodeService extends BaseService
 			]);
 
 			$c->recipient_id = $r->id;
+			$c->save();
+		});
+	}
+
+	/**
+	 * Redeem a code for merchant cards
+	 *
+	 * Currently, client sends a desired amount which is
+	 * a multiple of the lowest (min) amount a merchant supports.
+	 */
+	public function redeem(string $code, array $merchants): void
+	{
+		$u = $this->auth->user();
+		$lc = new LogContext(['code' => $code]);
+
+		$merchants = collect($merchants);
+
+		$lc->debug('processing redemption intent');
+		$c = $this->getByCode($code);
+
+		// ensure code is claimed
+		if (empty($c->recipient_id)) {
+			throw new UnauthorizedException(
+				new Exception('code not claimed')
+			);
+		}
+
+		if ($c->redeemed) {
+			throw new UnauthorizedException(
+				new Exception('code already redeemed')
+			);
+		}
+
+		// find recipient
+		$r = $u->recipients->first(function($x) use ($c) {
+			return $x->id === $c->recipient_id;
+		});
+
+		if (empty($r)) {
+			throw new UnauthorizedException(
+				new Exception('non-owner')
+			);
+		}
+
+		$this->processRedemption($c, $r, $merchants);
+	}
+
+	public function processRedemption(Code $c, Recipient $r, Collection $merchants): void
+	{
+		$items = collect([]);
+
+		// validate merchants and generate order items
+		$merchants->each(function($req) use (&$items, $r) {
+			$m = AdminMerchantFacade::getById($req['id']);
+
+			if (! $m->active) {
+				throw new Exception('merchant is not active');
+			}
+
+			$amount = (int) $req['amount'];
+
+			if ($m->custom_amount) {
+				$items->push([
+					'recipient_id' => $r->id,
+					'amount'       => $amount,
+					'merchant_id'  => $m->id,
+				]);
+
+				return;
+			}
+
+			// merchant does not support custom amounts,
+			// so we need to ensure we can fulfill desired amount
+
+			// get the lowest amount
+			$mAmounts = collect($m->amounts);
+			$min = (int) $mAmounts->min();
+
+			// ensure amount is a multiple of min
+			if ($amount % $min !== 0) {
+				throw new Exception('Amount is not a multiple of min');
+			}
+
+			// attempt to optimize
+			$optimized = (int) $mAmounts->sortDesc()->first(function($a) use ($amount) {
+				if ($amount % $a === 0) {
+					return true;
+				}
+			});
+
+			if (empty($optimized)) {
+				$optimized = $min;
+			}
+
+			$qty = $amount / $optimized;
+
+			for ($i = 0; $i < $qty; $i++) {
+				$items->push([
+					'recipient_id' => $r->id,
+					'amount'       => $optimized,
+					'merchant_id'  => $m->id,
+				]);
+			}
+		});
+
+		// Arrow functions!!!! :D
+		$sum = $items->reduce(fn($c, $i) => $c += $i['amount']) * 100;
+
+		if ($sum > config('a2helps.budget')) {
+			throw new Exception('Over budget');
+		}
+
+		$order = null;
+		DB::transaction(function () use ($c, $r, $items, &$order, $sum) {
+			$order = OrderFacade::create([
+				'code_id'      => $c->id,
+				'recipient_id' => $r->id,
+				'user_id'      => $r->user_id,
+				'amount'       => $sum,
+			]);
+
+			$items->each(function($i) use ($order) {
+				OrderCardFacade::create([
+					'order_id'     => $order->id,
+					'recipient_id' => $order->recipient_id,
+					'merchant_id'  => $i['merchant_id'],
+					'amount'       => $i['amount'] * 100,
+				]);
+			});
+
+			// should use service here
+			$c->redeemed = true;
 			$c->save();
 		});
 	}

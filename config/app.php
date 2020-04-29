@@ -13,7 +13,7 @@ return [
 	|
 	*/
 
-	'name' => env('APP_NAME', 'Laravel'),
+	'name' => env('APP_NAME', 'A2 Helps'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -185,13 +185,16 @@ return [
 		Admin\Users\UserServiceProvider::class,
 		Admin\Merchants\MerchantServiceProvider::class,
 
+		Api\Cards\CardServiceProvider::class,
 		Api\Codes\CodeServiceProvider::class,
 		Api\Donations\DonationServiceProvider::class,
+		Api\Merchants\MerchantServiceProvider::class,
+		Api\OrderCards\OrderCardServiceProvider::class,
+		Api\Orders\OrderServiceProvider::class,
 		Api\OrgMembers\OrgMemberServiceProvider::class,
 		Api\Orgs\OrgServiceProvider::class,
 		Api\Recipients\RecipientServiceProvider::class,
 		Api\Users\UserServiceProvider::class,
-		Api\Merchants\MerchantServiceProvider::class,
 
 		Api\Donations\DonationEventProvider::class,
 	],

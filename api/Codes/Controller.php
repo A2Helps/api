@@ -3,6 +3,7 @@
 namespace Api\Codes;
 
 use Api\Codes\Requests\BulkUpdateRequest;
+use Api\Codes\Requests\RedeemRequest;
 use Api\Codes\Requests\VerifyRequest;
 use Illuminate\Http\Request;
 use Infrastructure\Http\Controller as BaseController;
@@ -42,6 +43,13 @@ class Controller extends BaseController
 		$codes = $request->get('codes', []);
 
 		return CodeTransformer::collection($this->srvc->bulkUpdate($codes, $data));
+	}
+
+	public function redeem($code, RedeemRequest $request)
+	{
+		$merchants = $request->get('merchants', []);
+
+		$this->srvc->redeem($code, $merchants);
 	}
 
 	public function verify(VerifyRequest $request)

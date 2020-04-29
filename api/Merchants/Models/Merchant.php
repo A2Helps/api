@@ -22,11 +22,13 @@ class Merchant extends Model
 		'img_url',
 		'active',
 		'amounts',
+		'custom_amount',
 	];
 
 	protected $casts = [
-		'active'  => 'bool',
-		'amounts' => 'array',
+		'active'        => 'bool',
+		'amounts'       => 'array',
+		'custom_amount' => 'bool',
 	];
 
 	protected $dates = [

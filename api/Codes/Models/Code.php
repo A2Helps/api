@@ -37,6 +37,8 @@ class Code extends Model
 		'distributed',
 		'distributed_at',
 		'recipeint_id',
+		'redeemed',
+		'redeemed_at',
 	];
 
 	protected $casts = [
@@ -45,6 +47,7 @@ class Code extends Model
 		'sent'        => 'bool',
 		'printed'     => 'bool',
 		'distributed' => 'bool',
+		'redeemed'    => 'bool',
 	];
 
 	protected $dates = [
@@ -54,6 +57,7 @@ class Code extends Model
 		'distributed_at',
 		'printed_at',
 		'sent_at',
+		'redeemed_at',
 	];
 
 	protected $appends = [
@@ -75,6 +79,11 @@ class Code extends Model
 	public function setDistributedAttribute($value) {
 		$this->touchTimestamp($value, 'distributed');
 		$this->attributes['distributed'] = $value;
+	}
+
+	public function setRedeemedAttribute($value) {
+		$this->touchTimestamp($value, 'redeemed');
+		$this->attributes['redeemed'] = $value;
 	}
 
 	public function getDistributingAttribute() {
