@@ -55,9 +55,12 @@ function compact_uuid(string $uuid): string {
 	return preg_replace('/-/', '', Ramsey\Uuid\Uuid::fromString($uuid)->toString());
 }
 
-function shorten_uuid(string $uuid): string {
-	$su = new PascalDeVink\ShortUuid\ShortUuid();
+function shorten_uuid(string $uuid = null):? string {
+	if ($uuid === null) {
+		return null;
+	}
 
+	$su = new PascalDeVink\ShortUuid\ShortUuid();
 	return $su->encode(Ramsey\Uuid\Uuid::fromString($uuid));
 }
 

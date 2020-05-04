@@ -36,7 +36,7 @@ class Order extends Model implements Transformable
 		'amount'   => 'integer',
 	];
 
-	public function order_cards() {
+	public function orderCards() {
 		return $this->hasMany(OrderCard::class);
 	}
 }

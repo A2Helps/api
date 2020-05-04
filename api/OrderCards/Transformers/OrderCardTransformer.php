@@ -2,6 +2,7 @@
 
 namespace Api\OrderCards\Transformers;
 
+use Api\Merchants\Transformers\MerchantTransformer;
 use Api\Orgs\Transformers\OrgTransformer;
 use Api\Users\Transformers\UserTransformer;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -21,11 +22,11 @@ class OrderCardTransformer extends JsonResource
 		$data = $this->resource->toArray();
 
 		$data['id'] = shorten_uuid($data['id']);
-		$data['org_id'] = shorten_uuid($data['org_id']);
-		$data['user_id'] = shorten_uuid($data['user_id']);
+		$data['order_id'] = shorten_uuid($data['order_id']);
+		$data['merchant_id'] = shorten_uuid($data['merchant_id']);
+		$data['card_id'] = shorten_uuid($data['card_id']);
 
-		$data['org'] = new OrgTransformer($this->whenLoaded('org'));
-		$data['user'] = new UserTransformer($this->whenLoaded('user'));
+		$data['merchant'] = new MerchantTransformer($this->whenLoaded('merchant'));
 
 		return $data;
 	}

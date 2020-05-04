@@ -11,6 +11,9 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Api\Orders\Exceptions\OrderNotFoundException;
 use Api\Orders\Models\Order;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class OrderService
 {
@@ -30,15 +33,31 @@ class OrderService
 		$this->dispatcher = $dispatcher;
 	}
 
-	// public function getAll(): QueryBuilder
-	// {
-	// 	Log::debug('fetching all orders');
-	// }
+	public function getAll(): Collection
+	{
+		$user = Auth::user();
+		Log::debug('fetching all orders');
 
-	// public function getById($id): QueryBuilder
-	// {
-	// 	Log::debug('fetching order', ['order_id' => $id]);
-	// }
+		return QueryBuilder::for(Order::where('user_id', $user->id))
+			->allowedIncludes(['order_cards.merchant'])
+			->get();
+	}
+
+	public function getById($id): Order
+	{
+		$user = Auth::user();
+		Log::debug('fetching order', ['order_id' => $id]);
+
+		$order = QueryBuilder::for(Order::where('id', $id)->where('user_id', $user->id))
+			->allowedIncludes(['order_cards.merchant'])
+			->first();
+
+		if (empty($order)) {
+			throw new OrderNotFoundException($order);
+		}
+
+		return $order;
+	}
 
 	public function create($data): Order
 	{
