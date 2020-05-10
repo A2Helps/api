@@ -176,7 +176,7 @@ class CodeService extends BaseService
 			$r = RecipientFacade::getByPhone($phone);
 		} catch (RecipientNotFoundException $e) {}
 
-		// check if the code is claimed
+		// check if the code is claimed (has associated recipient)
 		if ($c->claimed) {
 			// if recipient is already created, and is user matching code, then verification passes
 			if (! empty($r) && $r->id === $c->recipient_id) {
@@ -209,9 +209,10 @@ class CodeService extends BaseService
 			}
 
 			$r = RecipientFacade::create([
-				'phone'   => $phone,
-				'name'    => $c->name,
-				'user_id' => $user->id,
+				'phone'      => $phone,
+				'user_id'    => $user->id,
+				'name_first' => $n[0] ?? null,
+				'name_last'  => $n[1] ?? null,
 			]);
 
 			$c->recipient_id = $r->id;

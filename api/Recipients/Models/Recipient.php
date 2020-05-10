@@ -23,8 +23,11 @@ class Recipient extends Model implements Transformable
 	 */
 	protected $fillable = [
 		'phone',
-		'name',
+		'email',
+		'name_first',
+		'name_last',
 		'user_id',
+		'org_id',
 	];
 
 	protected $casts = [

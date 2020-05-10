@@ -16,4 +16,13 @@ class Controller extends BaseController
 	{
 		$this->srvc = $srvc;
 	}
+
+	public function create(CreateRecipientRequest $request)
+	{
+		$data = $request->all();
+
+		$this->srvc->create($data);
+
+		return $this->response(['success' => true], 201);
+	}
 }

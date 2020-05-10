@@ -19,10 +19,10 @@ class Code extends Model
 	public $table = 'code';
 
 	/**
-	* The attributes that are mass assignable.
-	*
-	* @var array
-	*/
+	 * The attributes that are mass assignable.
+	 *
+	 * @var array
+	 */
 	protected $fillable = [
 		'code',
 		'phone',
@@ -36,7 +36,7 @@ class Code extends Model
 		'printed_at',
 		'distributed',
 		'distributed_at',
-		'recipeint_id',
+		'recipient_id',
 		'redeemed',
 		'redeemed_at',
 	];
