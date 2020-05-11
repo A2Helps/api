@@ -64,6 +64,21 @@ function shorten_uuid(string $uuid = null):? string {
 	return $su->encode(Ramsey\Uuid\Uuid::fromString($uuid));
 }
 
+function shorten_array_uuids(array $arr, array $include = [], array $except = []): array {
+	foreach ($arr as $k => $v) {
+		if (in_array($k, $except)) {
+			continue;
+		}
+
+		$isId = $k === 'id' || Illuminate\Support\Str::endsWith($k, ['_id']);
+		if ($isId || in_array($k, $include)) {
+			$arr[$k] = shorten_uuid($v);
+		}
+	}
+
+	return $arr;
+}
+
 function valid_cuuid(string $uuid): bool {
 	try {
 		Ramsey\Uuid\Uuid::fromString($uuid);

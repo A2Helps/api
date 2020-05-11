@@ -19,6 +19,7 @@ class CreateUserRequest extends ApiRequest
 			'user.password'   => 'required|string|min:6',
 			'user.name_first' => 'required|string',
 			'user.name_last'  => 'required|string',
+			'user.operator'   => 'boolean',
 		];
 	}
 

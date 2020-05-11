@@ -5,3 +5,5 @@
 // $router->post('/users',        '\Api\Users\Controller@create');
 // $router->put('/users/{id}',    '\Api\Users\Controller@update');
 // $router->delete('/users/{id}', '\Api\Users\Controller@delete');
+
+$router->get('/users/me',    '\Api\Users\Controller@getMe');

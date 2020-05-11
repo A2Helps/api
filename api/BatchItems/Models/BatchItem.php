@@ -1,26 +1,29 @@
 <?php
 
-namespace TEMPLATE_API_NS\TEMPLATE_UC_PLURAL_CAMEL\Models;
+namespace Api\BatchItems\Models;
 
 use Infrastructure\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Infrastructure\Models\ModelTransformer;
 use Infrastructure\Support\Contracts\Transformable;
 
-class TEMPLATE_UC_CAMEL extends Model implements Transformable
+class BatchItem extends Model implements Transformable
 {
 	use ModelTransformer;
 	use SoftDeletes;
 
 	protected $keyType = 'string';
-	public $table = 'TEMPLATE_LC_SNAKE';
+	public $table = 'batch_item';
 
 	protected $fillable = [
-
+		'batch_id',
+		'number',
+		'order_card_id',
+		'card_id',
 	];
 
 	protected $casts = [
-
+		'number' => 'string',
 	];
 
 	protected $hidden = [

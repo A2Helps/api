@@ -41,6 +41,20 @@ class UserService
 	// 	return $this->repository->get($options);
 	// }
 
+	public function getById($id): User
+	{
+		$id = expand_uuid($id);
+		Log::debug('fetching user', ['user_id' => $id]);
+
+		$user = QueryBuilder::for(User::where('id', $id))->first();
+
+		if (empty($user)) {
+			throw new UserNotFoundException();
+		}
+
+		return $user;
+	}
+
 	public function getByFbid($fbid): User
 	{
 		Log::debug('fetching user by fbid', ['fbid' => $fbid]);

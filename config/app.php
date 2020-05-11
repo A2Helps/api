@@ -196,6 +196,9 @@ return [
 		Api\Recipients\RecipientServiceProvider::class,
 		Api\Users\UserServiceProvider::class,
 
+		Api\Batches\BatchServiceProvider::class,
+		Api\BatchItems\BatchItemServiceProvider::class,
+
 		Api\Donations\DonationEventProvider::class,
 	],
 

@@ -27,10 +27,12 @@ class User extends Model implements Transformable
 		'phone',
 		'name_first',
 		'name_last',
+		'operator',
 	];
 
 	protected $casts = [
 		'phone' => 'string',
+		'operator' => 'boolean',
 	];
 
 	public function orgMember() {

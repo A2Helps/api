@@ -55,7 +55,7 @@ class AdminUserService extends UserService
 	public function create($data): User
 	{
 		$user = User::create(
-			Arr::only($data, ['email', 'name_first', 'name_last'])
+			Arr::only($data, ['email', 'name_first', 'name_last', 'operator'])
 		);
 
 		Log::info('created user', ['user_id' => $user->id]);
