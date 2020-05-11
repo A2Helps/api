@@ -40,8 +40,25 @@ class RecipientService
 		return $recipient;
 	}
 
+	public function getByEmail(string $email): Recipient
+	{
+		$recipient = Recipient::where('email', $email)->first();
+
+		if (empty($recipient)) {
+			throw new RecipientNotFoundException();
+		}
+
+		return $recipient;
+	}
+
 	public function create($data): Recipient
 	{
+		try {
+			$recipient = $this->getByPhone($data['phone']);
+
+			throw new \Exception('Phone exists');
+		} catch (RecipientNotFoundException $e) {}
+
 		$recipient = Recipient::create(
 			Arr::only($data, ['user_id', 'email', 'phone', 'name_first', 'name_last'])
 		);
