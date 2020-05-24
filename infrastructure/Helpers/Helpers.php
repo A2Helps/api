@@ -1,7 +1,5 @@
 <?php
 
-use PascalDeVink\ShortUuid\ShortUuid;
-
 function money_round ($amount): int {
 	return (int) (floor(round($amount) * 1000) / 1000);
 }
@@ -42,8 +40,12 @@ function uuid(): string {
 	return \Ramsey\Uuid\Uuid::uuid4()->toString();
 }
 
+function suid(): string {
+	return shorten_uuid(uuid());
+}
+
 function expand_uuid(string $uuid): string {
-	if (strlen($uuid) === 22) {
+	if (strlen($uuid) < 36) {
 		$su = new PascalDeVink\ShortUuid\ShortUuid();
 		return $su->decode($uuid);
 	}

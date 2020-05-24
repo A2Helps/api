@@ -16,7 +16,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $router = $this->app->make(Router::class);
 
-        $router->pattern('id', '(?:[0-9]+)|(?:[A-Za-z0-9]{22})|(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})');
+        $router->pattern('id', '(?:[0-9]+)|(?:[A-Za-z0-9]{20,26})|(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})');
 
         parent::boot($router);
     }

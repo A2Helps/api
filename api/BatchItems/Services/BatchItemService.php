@@ -47,7 +47,17 @@ class BatchItemService
 
 	public function update($id, array $data): BatchItem
 	{
+		$id = expand_uuid($id);
+		Log::info($id);
+
+		$batchItem = $this->getRequestedBatchItem($id);
+
+		$batchItem->fill($data);
+		$batchItem->save();
+
 		Log::info('updated batch_item', ['batch_item_id' => $id]);
+
+		return $batchItem->fresh();
 	}
 
 	public function delete($id): void

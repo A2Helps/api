@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Api\Batches\Exceptions\BatchNotFoundException;
 use Api\Batches\Models\Batch;
+use Cumulati\Monolog\LogContext;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class BatchService
@@ -68,6 +69,12 @@ class BatchService
 	{
 		$account = $this->auth->user();
 
+		$lc = new LogContext([
+			'batchId' => $id,
+		]);
+
+		$lc->info('updating batch');
+
 		$id = expand_uuid($id);
 		$batch = $this->getRequestedBatch($id);
 
@@ -83,6 +90,18 @@ class BatchService
 			}
 
 			$batch->assigned_to = $at;
+		}
+
+		if (! empty($data['completed'])) {
+			$lc->debug('attemping to mark batch complete');
+
+			$batch->batchItems->each(function($bi) {
+				if (empty($bi->number)) {
+					throw new \Exception('batch_item empty number');
+				}
+			});
+
+			$batch->completed = true;
 		}
 
 		$batch->save();

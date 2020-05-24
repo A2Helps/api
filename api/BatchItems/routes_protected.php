@@ -3,9 +3,9 @@
 use Infrastructure\Http\Middleware\OperatorEnforcement;
 
 $router->middleware([OperatorEnforcement::class])->group(function ($r) {
-	// $router->get('/batch_items',         '\Api\BatchItems\Controller@getAll');
-	// $router->get('/batch_items/{id}',    '\Api\BatchItems\Controller@getById');
-	// $router->post('/batch_items',        '\Api\BatchItems\Controller@create');
-	// $router->put('/batch_items/{id}',    '\Api\BatchItems\Controller@update');
-	// $router->delete('/batch_items/{id}', '\Api\BatchItems\Controller@delete');
+	// $r->get('/batch_items',         '\Api\BatchItems\Controller@getAll');
+	// $r->get('/batch_items/{id}',    '\Api\BatchItems\Controller@getById');
+	// $r->post('/batch_items',        '\Api\BatchItems\Controller@create');
+	$r->put('/batch_items/{id}',    '\Api\BatchItems\Controller@update');
+	// $r->delete('/batch_items/{id}', '\Api\BatchItems\Controller@delete');
 });
