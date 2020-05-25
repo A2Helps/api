@@ -10,6 +10,8 @@ use Illuminate\Database\DatabaseManager;
 use Api\Recipients\Exceptions\RecipientNotFoundException;
 use Api\Recipients\Models\Recipient;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class RecipientService
 {
@@ -49,6 +51,13 @@ class RecipientService
 		}
 
 		return $recipient;
+	}
+
+	public function getAll(): Collection
+	{
+		Log::debug('fetching all recipients');
+
+		return QueryBuilder::for(Recipient::class)->get();
 	}
 
 	public function create($data): Recipient

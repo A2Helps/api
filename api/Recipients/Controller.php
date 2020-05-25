@@ -25,4 +25,9 @@ class Controller extends BaseController
 
 		return $this->response(['success' => true], 201);
 	}
+
+	public function getAll()
+	{
+		return RecipientTransformer::collection($this->srvc->getAll());
+	}
 }

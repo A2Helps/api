@@ -20,6 +20,10 @@ class DonationTransformer extends JsonResource
 
 		$data['id'] = shorten_uuid($data['id']);
 
+		if (auth()->check() && auth()->user()->operator) {
+			return $data;
+		}
+
 		return Arr::only($data, [
 			'id',
 			'amount',

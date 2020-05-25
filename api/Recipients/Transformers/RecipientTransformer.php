@@ -4,7 +4,9 @@ namespace Api\Recipients\Transformers;
 
 use Api\RecipientMembers\Transformers\RecipientMemberTransformer;
 use Api\Codes\Transformers\CodeTransformer;
+use Api\Orgs\Transformers\OrgTransformer;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class RecipientTransformer extends JsonResource
@@ -21,9 +23,8 @@ class RecipientTransformer extends JsonResource
 
 		$data['id'] = shorten_uuid($data['id']);
 
-		$data['recipient_members'] = RecipientMemberTransformer::collection($this->whenLoaded('recipientMembers'));
-		$data['codes'] = CodeTransformer::collection($this->whenLoaded('codes'));
+		$data['org'] = new OrgTransformer($this->whenLoaded('org'));
 
-		return $data;
+		return Arr::only($data, ['id', 'name_first', 'name_last']);
 	}
 }

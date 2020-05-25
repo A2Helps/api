@@ -42,6 +42,10 @@ class DonationService
 	{
 		Log::debug('fetching all donations');
 
+		if (auth()->check() && auth()->user()->operator) {
+			return QueryBuilder::for(Donation::class)->get();
+		}
+
 		// only return id and public_name
 		return Donation::where('public', true)
 			->where('completed', true)

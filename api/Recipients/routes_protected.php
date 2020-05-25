@@ -1,8 +1,7 @@
 <?php
 
-// $router->get('/recipients',         '\Api\Recipients\Controller@getAll');
-// $router->get('/recipients/{id}',    '\Api\Recipients\Controller@getById');
+use Infrastructure\Http\Middleware\OperatorEnforcement;
 
-// $router->post('/recipients',        '\Api\Recipients\Controller@create');
-// $router->put('/recipients/{id}',    '\Api\Recipients\Controller@update');
-// $router->delete('/recipients/{id}', '\Api\Recipients\Controller@delete');
+$router->middleware([OperatorEnforcement::class])->group(function ($r) {
+	$r->get('/recipients',         '\Api\Recipients\Controller@getAll');
+});

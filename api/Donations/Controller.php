@@ -27,6 +27,10 @@ class Controller extends BaseController
 
 	public function getAll()
 	{
+		if (auth()->check() && auth()->user()->operator) {
+			return DonationTransformer::collection($this->srvc->getAll());
+		}
+
 		return $this->srvc->getAll();
 	}
 
