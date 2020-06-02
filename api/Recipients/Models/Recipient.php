@@ -29,6 +29,7 @@ class Recipient extends Model implements Transformable
 		'name_last',
 		'user_id',
 		'org_id',
+		'code_id', // default code
 	];
 
 	protected $casts = [
@@ -39,9 +40,13 @@ class Recipient extends Model implements Transformable
 		return $this->hasMany(Code::class);
 	}
 
+	public function code() {
+		return $this->hasOne(Code::class);
+	}
+
 	public function scopeSelected(Builder $query, $selected): Builder {
 		return (bool) $selected
-			? $query->whereNotNull('org_id')
-			: $query->whereNull('org_id');
+			? $query->whereNotNull('code_id')
+			: $query->whereNull('code_id');
 	}
 }

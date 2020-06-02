@@ -4,6 +4,9 @@ namespace Infrastructure\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Infrastructure\Console\Commands\OrgAllot;
+use Infrastructure\Console\Commands\OrgList;
+use Infrastructure\Console\Commands\RecipientLinkOrg;
 
 class Kernel extends ConsoleKernel
 {
@@ -13,7 +16,11 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        ResourceMake::class,
+		ResourceMake::class,
+
+		OrgList::class,
+		OrgAllot::class,
+		RecipientLinkOrg::class,
     ];
 
     /**
