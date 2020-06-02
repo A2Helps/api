@@ -180,6 +180,13 @@ class CodeService extends BaseService
 
 		// check if the code is claimed (has associated recipient)
 		if ($c->claimed) {
+			// if this recipient does not have a phone, assign the phone number
+			if (empty($c->recipient->phone)) {
+				$c->recipient->phone = $phone;
+				$c->recipient->save();
+				$r = $c->recipient;
+			}
+
 			// if recipient is already created, and is user matching code, then verification passes
 			if (! empty($r) && $r->id === $c->recipient_id) {
 				if (! empty($c->recipient->user_id)) {
