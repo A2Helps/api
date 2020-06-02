@@ -50,7 +50,10 @@ class OrgCodesPopulateRecipient extends Command
 				return;
 			}
 
-			$r = Recipient::where('org_id', $org->id)->inRandomOrder()->first();
+			$r = Recipient::where('org_id', $org->id)
+				->whereNull('code_id')
+				->inRandomOrder()
+				->first();
 
 			if (empty($r)) {
 				return;
