@@ -20,6 +20,7 @@ class Merchant extends Model
 	protected $fillable = [
 		'name',
 		'img_url',
+		'gc_url',
 		'active',
 		'amounts',
 		'custom_amount',

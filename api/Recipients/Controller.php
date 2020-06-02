@@ -30,4 +30,9 @@ class Controller extends BaseController
 	{
 		return RecipientTransformer::collection($this->srvc->getAll());
 	}
+
+	public function getById($id)
+	{
+		return new RecipientTransformer($this->srvc->getById($id));
+	}
 }

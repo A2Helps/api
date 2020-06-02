@@ -62,6 +62,10 @@ function shorten_uuid(string $uuid = null):? string {
 		return null;
 	}
 
+	return $uuid;
+
+	// TODO: make faster.
+
 	$su = new PascalDeVink\ShortUuid\ShortUuid();
 	return $su->encode(Ramsey\Uuid\Uuid::fromString($uuid));
 }

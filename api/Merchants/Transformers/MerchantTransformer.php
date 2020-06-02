@@ -2,6 +2,7 @@
 
 namespace Api\Merchants\Transformers;
 
+use Log;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,6 +19,10 @@ class MerchantTransformer extends JsonResource
 		$data = $this->resource->toArray();
 
 		$data['id'] = shorten_uuid($data['id']);
+
+		if (empty($data['amounts'])) {
+			$data['amounts'] = [];
+		}
 
 		$data['amounts'] = collect($data['amounts'])->map(function($v) { return (int) $v; });
 

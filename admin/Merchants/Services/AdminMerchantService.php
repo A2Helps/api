@@ -61,21 +61,6 @@ class AdminMerchantService extends MerchantService
 		return $merchant;
 	}
 
-	public function create($data): Merchant
-	{
-		$data = Arr::only($data, ['name', 'img_url', 'active', 'amounts']);
-
-		if (!empty($data['amounts'])) {
-			$data['amounts'] = explode(',', $data['amounts']);
-		}
-
-		$merchant = Merchant::create($data);
-
-		Log::info('created merchant', ['merchant_id' => $merchant->id]);
-
-		return $merchant;
-	}
-
 	public function update($id, array $data): Merchant
 	{
 		$id = expand_uuid($id);

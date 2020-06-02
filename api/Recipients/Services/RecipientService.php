@@ -11,6 +11,7 @@ use Api\Recipients\Exceptions\RecipientNotFoundException;
 use Api\Recipients\Models\Recipient;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class RecipientService
@@ -53,20 +54,46 @@ class RecipientService
 		return $recipient;
 	}
 
+	public function getById($id): Recipient
+	{
+		$id = expand_uuid($id);
+
+		Log::debug('fetching recipient', ['recipient_id' => $id]);
+
+		$recipient = QueryBuilder::for(Recipient::where('id', $id))
+			->first();
+
+		if (empty($recipient)) {
+			throw new RecipientNotFoundException();
+		}
+
+		return $recipient;
+	}
+
 	public function getAll(): Collection
 	{
 		Log::debug('fetching all recipients');
 
-		return QueryBuilder::for(Recipient::class)->get();
+		return QueryBuilder::for(Recipient::class)
+			->allowedFilters([
+				AllowedFilter::scope('selected'),
+			])
+			->get();
 	}
 
 	public function create($data): Recipient
 	{
-		try {
-			$recipient = $this->getByPhone($data['phone']);
+		if (! empty($data['phone'])) {
+			try {
+				$recipient = $this->getByPhone($data['phone']);
 
-			throw new \Exception('Phone exists');
-		} catch (RecipientNotFoundException $e) {}
+				throw new \Exception('Phone exists');
+			} catch (RecipientNotFoundException $e) {}
+		}
+
+		if (!empty($data['email'])) {
+			$data['email'] = strtolower($data['email']);
+		}
 
 		$recipient = Recipient::create(
 			Arr::only($data, ['user_id', 'email', 'phone', 'name_first', 'name_last'])

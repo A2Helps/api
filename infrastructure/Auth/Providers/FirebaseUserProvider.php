@@ -2,6 +2,7 @@
 
 namespace Infrastructure\Auth\Providers;
 
+use Api\Users\Exceptions\UserNotFoundException;
 use Api\Users\UserFacade;
 use Firebase\Auth\Token\Exception\ExpiredToken;
 use Firebase\Auth\Token\Exception\InvalidSignature;
@@ -56,7 +57,15 @@ class FirebaseUserProvider implements UserProvider
 		$uid = $token->getClaim('sub');
 		Log::debug('UID', ['uid' => $uid]);
 
-		$user = UserFacade::getByFbid($uid);
+		try {
+			$user = UserFacade::getByFbid($uid);
+		} catch (UserNotFoundException $e) {
+			Log::info('received access token for fb user which does not exist', [
+				'fbid' => $uid,
+			]);
+
+			return $this->rejectToken($st, 'auth error', $credential);
+		}
 
 		Log::info('Accepted access token', [
 			'user_id' => $user->id,

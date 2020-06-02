@@ -27,6 +27,12 @@ class AdminEnforcement extends IlluminateAuthenticate
 			return $next($request);
 		}
 
+		if (Auth::user()) {
+			if (Auth::user()->admin) {
+				return $next($request);
+			}
+		}
+
 		$token = $request->bearerToken();
 
 		if (empty($token)) {

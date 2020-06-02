@@ -55,7 +55,7 @@ class AdminUserService extends UserService
 	public function create($data): User
 	{
 		$user = User::create(
-			Arr::only($data, ['email', 'name_first', 'name_last', 'operator'])
+			Arr::only($data, ['email', 'name_first', 'name_last'])
 		);
 
 		Log::info('created user', ['user_id' => $user->id]);
@@ -70,8 +70,16 @@ class AdminUserService extends UserService
 		];
 
 		$fUser = FirebaseAuth::createUser($userProperties);
-
 		$user->fbid = $fUser->uid;
+
+		if (! empty($data['operator'])) {
+			$user->operator = (bool) $data['operator'];
+		}
+
+		if (! empty($data['admin'])) {
+			$user->admin = (bool) $data['admin'];
+		}
+
 		$user->save();
 
 		Log::info('created user', ['user_id' => $user->id]);
@@ -116,6 +124,8 @@ class AdminUserService extends UserService
 				$r->codes->each(function($c) use ($lc) {
 					$lc->info('removing recipient from code', ['recipient_id' => $c->recipeint_id, 'code_id' => $c->id]);
 					$c->recipient_id = null;
+					$c->redeemed = false;
+					$c->redeemed_at = null;
 					$c->save();
 				});
 

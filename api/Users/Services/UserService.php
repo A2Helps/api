@@ -90,7 +90,7 @@ class UserService
 			Arr::only($data, ['phone', 'name_first', 'name_last'])
 		);
 
-		Log::debug('created user', ['user_id' => $user->id]);
+		Log::debug('created user. creating fb user', ['user_id' => $user->id]);
 
 		$fUser = FirebaseAuth::createUser([
 			'phoneNumber' => sprintf('+1%d', substr($data['phone'], 0, 10)),

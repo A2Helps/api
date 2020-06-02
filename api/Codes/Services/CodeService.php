@@ -174,20 +174,49 @@ class CodeService extends BaseService
 		try {
 			// check if we already have a recipient with this phone
 			$r = RecipientFacade::getByPhone($phone);
+
+			Log::info('found recipient', ['recipientId' => $r->id]);
 		} catch (RecipientNotFoundException $e) {}
 
 		// check if the code is claimed (has associated recipient)
 		if ($c->claimed) {
 			// if recipient is already created, and is user matching code, then verification passes
 			if (! empty($r) && $r->id === $c->recipient_id) {
+				if (! empty($c->recipient->user_id)) {
+					// we have a user account
+					// success
+					return;
+				}
+
+				// we dont have a user, so we need to create it
+				try {
+					$user = UserFacade::createRecipientUser([
+						'phone'      => $phone,
+						// 'email'      => $r->email,
+						'name_first' => $r->name_first,
+						'name_lat'   => $r->name_lat,
+					]);
+				} catch (PhoneNumberExists $e) {
+					throw new UnauthorizedException(
+						new Exception('verify.recipient.exists')
+					);
+				}
+
+				$r->user_id = $user->id;
+				$r->save();
+
+				// success
 				return;
 			}
-
-			throw new UnauthorizedException(
-				new Exception('verify.code.claimed')
-			);
+			else {
+				throw new UnauthorizedException(
+					new Exception('verify.code.claimed')
+				);
+			}
 		}
 		else if (! empty($r)) {
+			Log::info('recipient is duplicate', ['recipientId' => $r->id]);
+
 			throw new UnauthorizedException(
 				new Exception('verify.recipient.duplicate')
 			);
@@ -204,7 +233,7 @@ class CodeService extends BaseService
 				]);
 			} catch (PhoneNumberExists $e) {
 				throw new UnauthorizedException(
-					new Exception('veryify.recipient.exists')
+					new Exception('verify.recipient.exists')
 				);
 			}
 
@@ -277,7 +306,13 @@ class CodeService extends BaseService
 
 			$amount = (int) $req['amount'];
 
+			if ($amount === 0) {
+				return;
+			}
+
 			if ($m->custom_amount) {
+				// FIXME: check that is a multiple of min amount
+
 				$items->push([
 					'recipient_id' => $r->id,
 					'amount'       => $amount,
