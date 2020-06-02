@@ -25,6 +25,6 @@ class RecipientTransformer extends JsonResource
 
 		$data['org'] = new OrgTransformer($this->whenLoaded('org'));
 
-		return Arr::only($data, ['id', 'name_first', 'name_last']);
+		return Arr::only($data, ['id', 'name_first', 'name_last', 'phone', 'email']);
 	}
 }
