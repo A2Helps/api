@@ -269,6 +269,8 @@ class CodeService extends BaseService
 	 */
 	public function redeem(string $code, array $merchants): void
 	{
+		$code = trim(strtoupper($code));
+
 		$u = $this->auth->user();
 		$lc = new LogContext(['code' => $code]);
 
