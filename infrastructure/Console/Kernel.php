@@ -4,6 +4,7 @@ namespace Infrastructure\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Infrastructure\Console\Commands\BatchCreate;
 use Infrastructure\Console\Commands\CodeDistribute;
 use Infrastructure\Console\Commands\OrgAllot;
 use Infrastructure\Console\Commands\OrgCodesPopulateRecipient;
@@ -25,6 +26,7 @@ class Kernel extends ConsoleKernel
 		RecipientLinkOrg::class,
 		OrgCodesPopulateRecipient::class,
 		CodeDistribute::class,
+		BatchCreate::class,
     ];
 
     /**

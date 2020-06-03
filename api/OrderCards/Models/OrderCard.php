@@ -31,6 +31,7 @@ class OrderCard extends Model implements Transformable
 		'merchant_id',
 		'amount',
 		'card_id',
+		'batch_item_id',
 	];
 
 	protected $casts = [

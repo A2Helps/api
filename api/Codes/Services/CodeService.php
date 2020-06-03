@@ -88,7 +88,7 @@ class CodeService extends BaseService
 
 	public function getByCode(string $code): Code
 	{
-		$code = Code::where('code', $code)->first();
+		$code = Code::where('code', strtoupper($code))->first();
 
 		if (empty($code)) {
 			throw new CodeNotFoundException();
@@ -166,6 +166,7 @@ class CodeService extends BaseService
 	 */
 	public function verify(string $code, string $phone): void
 	{
+		$code = trim(strtoupper($code));
 		Log::info('attempting to verify code', ['code' => $code, 'phone' => $phone]);
 
 		$c = $this->getByCode($code);
@@ -204,6 +205,8 @@ class CodeService extends BaseService
 						'name_lat'   => $r->name_lat,
 					]);
 				} catch (PhoneNumberExists $e) {
+					Log::info('phone is in use');
+
 					throw new UnauthorizedException(
 						new Exception('verify.recipient.exists')
 					);
@@ -216,6 +219,8 @@ class CodeService extends BaseService
 				return;
 			}
 			else {
+				Log::info('code is claimed by different recipient');
+
 				throw new UnauthorizedException(
 					new Exception('verify.code.claimed')
 				);
