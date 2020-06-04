@@ -2,6 +2,7 @@
 
 namespace Api\BatchItems\Models;
 
+use Api\OrderCards\Models\OrderCard;
 use Infrastructure\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Infrastructure\Models\ModelTransformer;
@@ -29,4 +30,8 @@ class BatchItem extends Model implements Transformable
 	protected $hidden = [
 
 	];
+
+	public function orderCard() {
+		return $this->belongsTo(OrderCard::class);
+	}
 }

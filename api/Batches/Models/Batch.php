@@ -27,17 +27,21 @@ class Batch extends Model implements Transformable
 		'assigned_at',
 		'completed',
 		'completed_at',
+		'finalized',
+		'finalized_at',
 	];
 
 	protected $casts = [
 		'amount'    => 'integer',
 		'quantity'  => 'integer',
 		'completed' => 'boolean',
+		'finalized' => 'boolean',
 	];
 
 	protected $dates = [
 		'assigned_at',
 		'completed_at',
+		'finalized_at',
 		'created_at',
 		'updated_at',
 		'deleted_at',
@@ -50,6 +54,11 @@ class Batch extends Model implements Transformable
 	public function setCompletedAttribute($value) {
 		$this->touchTimestamp($value, 'completed');
 		$this->attributes['completed'] = $value;
+	}
+
+	public function setFinalizedAttribute($value) {
+		$this->touchTimestamp($value, 'finalized');
+		$this->attributes['finalized'] = $value;
 	}
 
 	public function batchItems() {

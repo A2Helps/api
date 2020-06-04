@@ -113,7 +113,8 @@ class BatchService
 
 	public function delete($id): void
 	{
-		Log::info('deleted batch', ['batch_id' => $id]);
+		throw new \Exception('not implemented');
+		// Log::info('deleted batch', ['batch_id' => $id]);
 	}
 
 	private function getRequestedBatch($id): Batch

@@ -4,6 +4,7 @@ namespace Api\Orders\Models;
 
 use Api\OrderCards\Models\OrderCard;
 use Api\Orgs\Models\Org;
+use Api\Recipients\Models\Recipient;
 use Api\Users\Models\User;
 use Infrastructure\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -36,6 +37,8 @@ class Order extends Model implements Transformable
 		'amount',
 		'batched',
 		'batched_at',
+		'finalized',
+		'finalized_at',
 	];
 
 	protected $casts = [
@@ -49,6 +52,7 @@ class Order extends Model implements Transformable
 		'batched_at',
 		'cards_sent_at',
 		'complete_at',
+		'finalized_at',
 		'created_at',
 		'updated_at',
 		'deleted_at',
@@ -69,7 +73,16 @@ class Order extends Model implements Transformable
 		$this->attributes['batched'] = $value;
 	}
 
+	public function setFinalizedAttribute($value) {
+		$this->touchTimestamp($value, 'finalized');
+		$this->attributes['finalized'] = $value;
+	}
+
 	public function orderCards() {
 		return $this->hasMany(OrderCard::class);
+	}
+
+	public function recipient() {
+		return $this->belongsTo(Recipient::class);
 	}
 }
