@@ -9,6 +9,7 @@ use Infrastructure\Console\Commands\BatchFinalize;
 use Infrastructure\Console\Commands\CodeDistribute;
 use Infrastructure\Console\Commands\OrderCardsSend;
 use Infrastructure\Console\Commands\OrderFinalize;
+use Infrastructure\Console\Commands\CodeRemind;
 use Infrastructure\Console\Commands\OrgAllot;
 use Infrastructure\Console\Commands\OrgCodesPopulateRecipient;
 use Infrastructure\Console\Commands\OrgList;
@@ -29,6 +30,7 @@ class Kernel extends ConsoleKernel
 		RecipientLinkOrg::class,
 		OrgCodesPopulateRecipient::class,
 		CodeDistribute::class,
+		CodeRemind::class,
 		BatchCreate::class,
 		BatchFinalize::class,
 		OrderFinalize::class,
