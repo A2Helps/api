@@ -38,8 +38,15 @@ class OrderService
 		$user = Auth::user();
 		Log::debug('fetching all orders');
 
-		return QueryBuilder::for(Order::where('user_id', $user->id))
-			->allowedIncludes(['order_cards.merchant'])
+		$qb = QueryBuilder::for(Order::where('user_id', $user->id));
+		if ($user->operator) {
+			$qb = QueryBuilder::for(Order::class)
+				->allowedFilters([
+					AllowedFilter::exact('user_id'),
+				]);
+		}
+
+		return $qb->allowedIncludes(['order_cards.merchant'])
 			->get();
 	}
 
