@@ -59,10 +59,11 @@ class OrgCodesPopulateRecipient extends Command
 				return;
 			}
 
+			$r->phone = null;
 			$r->code_id = $code->id;
 
 			$code->recipient_id = $r->id;
-			$code->phone = $r->phone;
+			$code->phone = null;
 			$code->email = $r->email;
 			$code->name = sprintf('%s %s', $r->name_first, $r->name_last);
 
