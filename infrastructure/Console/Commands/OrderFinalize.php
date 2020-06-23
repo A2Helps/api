@@ -52,7 +52,9 @@ class OrderFinalize extends Command
 		$orders = Order::where('batched', true)->where('finalized', false)->get();
 
 		$orders->each(function($o) {
-			$unfinalized = $o->orderCards->find(fn($oc) => ! empty($oc->card_id));
+			$unfinalized = $o->orderCards->contains(function($oc) {
+				return empty($oc->card_id) || ! $oc->batchItem->batch->finalized;
+			});
 
 			if ($unfinalized) {
 				$this->comment(sprintf('Order is not fulfilled: %s', $o->id));

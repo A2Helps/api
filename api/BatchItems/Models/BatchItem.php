@@ -2,6 +2,7 @@
 
 namespace Api\BatchItems\Models;
 
+use Api\Batches\Models\Batch;
 use Api\OrderCards\Models\OrderCard;
 use Infrastructure\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,5 +34,9 @@ class BatchItem extends Model implements Transformable
 
 	public function orderCard() {
 		return $this->belongsTo(OrderCard::class);
+	}
+
+	public function batch() {
+		return $this->belongsto(Batch::class);
 	}
 }

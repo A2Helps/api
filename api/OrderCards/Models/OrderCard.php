@@ -2,6 +2,7 @@
 
 namespace Api\OrderCards\Models;
 
+use Api\BatchItems\Models\BatchItem;
 use Api\Cards\Models\Card;
 use Api\Merchants\Models\Merchant;
 use Api\Orders\Models\Order;
@@ -48,5 +49,9 @@ class OrderCard extends Model implements Transformable
 
 	public function card() {
 		return $this->belongsTo(Card::class);
+	}
+
+	public function batchItem() {
+		return $this->belongsTo(BatchItem::class);
 	}
 }
