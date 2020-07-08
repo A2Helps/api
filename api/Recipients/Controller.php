@@ -35,4 +35,9 @@ class Controller extends BaseController
 	{
 		return new RecipientTransformer($this->srvc->getById($id));
 	}
+
+	public function reset($id)
+	{
+		return $this->srvc->reset($id);
+	}
 }

@@ -40,7 +40,7 @@ class BatchService
 			->allowedIncludes(['batch_items', 'merchant'])
 			->allowedFilters([
 				AllowedFilter::exact('id'),
-				AllowedFilter::exact('complete'),
+				AllowedFilter::scope('completed'),
 			])
 			->get();
 	}

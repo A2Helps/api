@@ -2,6 +2,7 @@
 
 namespace Api\Recipients\Services;
 
+use Api\Codes\Jobs\DistributeCodeJob;
 use Exception;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Events\Dispatcher;
@@ -102,6 +103,32 @@ class RecipientService
 		Log::info('created recipient', ['recipient_id' => $recipient->id]);
 
 		return $recipient;
+	}
+
+	public function reset($id) {
+		try {
+			$r = $this->getRequestedRecipient($id);
+		} catch(RecipientNotFoundException $e) {
+			return ['error' => 'Recipient not found'];
+		}
+
+		if (empty($r->code_id)) {
+			return ['error' => 'Recipient was not offered a code'];
+		}
+
+		if ($r->code->redeemed) {
+			return ['error' => 'Recipient already successfuly redeemed code'];
+		}
+
+		$r->phone = null;
+		$r->save();
+
+		$r->code->phone = null;
+		$r->code->save();
+
+		DistributeCodeJob::dispatch($r->code);
+
+		return ['success' => true];
 	}
 
 	protected function getRequestedRecipient($id): Recipient

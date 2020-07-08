@@ -4,6 +4,7 @@ namespace Api\Batches\Models;
 
 use Api\BatchItems\Models\BatchItem;
 use Api\Merchants\Models\Merchant;
+use Illuminate\Database\Eloquent\Builder;
 use Infrastructure\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Infrastructure\Database\Eloquent\Timestamper;
@@ -76,5 +77,9 @@ class Batch extends Model implements Transformable
 		}
 
 		return $this->assigned_to === $user->id;
+	}
+
+	public function scopeCompleted(Builder $query, $completed): Builder {
+		return $query->where('completed', (bool) $completed);
 	}
 }
