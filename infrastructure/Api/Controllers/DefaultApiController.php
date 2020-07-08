@@ -61,7 +61,8 @@ class DefaultApiController extends BaseController
 				$x['redeemed'] = $q->redeemed;
 
 				return $x;
-			});
+			})
+			->values();
 
 		$stats['orgs'] = $orgs;
 
